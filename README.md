@@ -11,7 +11,7 @@
 
 ### Пример подключения со стороны клиента
 
-'''
+```java
 ConnectionFactory cf = new ConnectionFactory();
 
 cf.setHost("localhost");
@@ -29,6 +29,6 @@ executor.set("main", "12321", "rrrtgs");
 System.out.println(executor.get("main", "123"));
 
 conn.close();
-'''
+```
 
 ### TODO
