@@ -16,8 +16,13 @@ public class Main {
             connectionsLimit.acquire();
             Thread thread = new Thread(() -> {
                 Connection connection = connectionFactory.createConnection();
-                connection.listen();
-                connection.close();
+                try {
+                    connection.listen();
+                } catch (Exception e) {
+                    System.out.println(e);
+                } finally {
+                    connection.close();
+                }
                 connectionsLimit.release();
             });
             thread.start();

@@ -40,6 +40,11 @@ public class Connection {
     }
 
     public void close() {
-        networkService.close();
+        try{
+            networkService.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 }
