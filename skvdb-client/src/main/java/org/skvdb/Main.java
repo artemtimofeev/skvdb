@@ -11,7 +11,7 @@ public class Main {
         cf.setHost("localhost");
         cf.setPort(4004);
         cf.setUsername("user");
-        cf.setPassword("password12");
+        cf.setPassword("password");
 
         Connection conn = cf.createConnection();
 
