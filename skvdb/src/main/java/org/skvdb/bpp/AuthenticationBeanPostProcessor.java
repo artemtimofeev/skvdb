@@ -46,6 +46,7 @@ public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
                     for (AuthenticationFilter authenticationFilter : authenticationFilterlist) {
                         isSuccessfulAuthentication = isSuccessfulAuthentication && authenticationFilter.check(request);
                     }
+                    System.out.println("Аутентификация проведена успешно");
                     if (isSuccessfulAuthentication) {
                         Object retVal = method.invoke(bean, args);
                         return retVal;

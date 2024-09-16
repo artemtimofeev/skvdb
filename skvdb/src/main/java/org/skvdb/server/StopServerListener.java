@@ -1,13 +1,14 @@
-package org.skvdb;
+package org.skvdb.server;
 
 import jakarta.annotation.PostConstruct;
+import org.skvdb.network.SocketAcceptor;
+import org.skvdb.service.ServerStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Component
 public class StopServerListener {

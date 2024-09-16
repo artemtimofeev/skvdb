@@ -1,6 +1,6 @@
 package org.skvdb.server;
 
-import org.skvdb.ServerStatusService;
+import org.skvdb.service.ServerStatusService;
 import org.skvdb.controller.Controller;
 import org.skvdb.dto.*;
 import org.skvdb.network.NetworkService;
@@ -31,7 +31,7 @@ public class Connection implements Runnable{
             Request request = networkService.receive();
             String methodName = request.getMethodName();
             try {
-                Method method = controller.getClass().getMethod(methodName);
+                Method method = controller.getClass().getMethod(methodName, Request.class);
                 networkService.send((Result) method.invoke(controller, request));
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);

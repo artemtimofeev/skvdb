@@ -1,4 +1,4 @@
-package org.skvdb.network;
+package org.skvdb.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

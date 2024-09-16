@@ -1,4 +1,4 @@
-package org.skvdb;
+package org.skvdb.network;
 
 import org.skvdb.configuration.settings.ServerSettings;
 import org.springframework.beans.factory.annotation.Autowired;

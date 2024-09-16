@@ -1,4 +1,4 @@
-package org.skvdb;
+package org.skvdb.service;
 
 import org.springframework.stereotype.Service;
 

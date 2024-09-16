@@ -1,7 +1,6 @@
-package org.skvdb;
+package org.skvdb.server;
 
 import org.skvdb.configuration.settings.ServerSettings;
-import org.skvdb.server.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

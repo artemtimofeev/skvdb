@@ -1,4 +1,4 @@
-package org.skvdb;
+package org.skvdb.service;
 
 public enum ServerStatus {
     RUNNING,

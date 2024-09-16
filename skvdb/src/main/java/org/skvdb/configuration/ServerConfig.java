@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 public class ServerConfig {
     @Bean
     public static ServerSettings getDatabaseConfiguration() {
-        return new ServerSettings(4004, 1);
+        return new ServerSettings(4004, 100);
     }
 
     @Bean

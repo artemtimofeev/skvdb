@@ -1,3 +1,5 @@
+В ветке spring-based находится версия сервера на Spring Framework
+
 `skvdb` означает simple key-value database
 
 `/scvdb` -- сервер базы данных

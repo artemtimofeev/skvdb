@@ -1,11 +1,11 @@
 package org.skvdb.network;
 
-import org.skvdb.dto.CloseConnectionDto;
-import org.skvdb.dto.QueryDto;
-import org.skvdb.dto.QueryResultDto;
-import org.skvdb.dto.RequestResult;
+import org.skvdb.dto.*;
 import org.skvdb.exception.QueryException;
 import org.skvdb.security.AuthenticationService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Connection {
     private String token;
@@ -23,22 +23,26 @@ public class Connection {
     }
 
     public void close() {
-        networkService.send(new CloseConnectionDto("true", token));
         networkService.close();
     }
 
     public class Executor {
         public String get(String tableName, String key) {
-            QueryResultDto queryResultDto = (QueryResultDto) networkService.send(new QueryDto("get", tableName, key, null, token));
-            if (queryResultDto.result().equals(RequestResult.OK)) {
-                return queryResultDto.value();
+            Map<String, String> body = new HashMap<>();
+            body.put("key", key);
+            Result result = networkService.send(new Request("username", "password", token, "get", body));
+            if (result.getRequestResult().equals(RequestResult.OK)) {
+                return result.getBody().get("value");
             }
             throw new QueryException("Ошибка во время выполнения запроса");
         }
 
         public void set(String tableName, String key, String value) {
-            QueryResultDto queryResultDto = (QueryResultDto) networkService.send(new QueryDto("set", tableName, key, value, token));
-            if (queryResultDto.result().equals(RequestResult.OK)) {
+            Map<String, String> body = new HashMap<>();
+            body.put("key", key);
+            body.put("value", value);
+            Result result = networkService.send(new Request("username", "password", "token", "set", body));
+            if (result.getRequestResult().equals(RequestResult.OK)) {
                 return;
             }
             throw new QueryException("Ошибка во время выполнения запроса");

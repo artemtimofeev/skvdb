@@ -22,7 +22,7 @@ public class Main {
         executor.set("main", "12321", "rrrtgs");*/
         System.out.println(executor.get("main", "123"));
 
-        Thread.sleep(100000);
+        //Thread.sleep(100000);
 
         conn.close();
 

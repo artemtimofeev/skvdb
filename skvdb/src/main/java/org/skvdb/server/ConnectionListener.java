@@ -1,10 +1,10 @@
-package org.skvdb;
+package org.skvdb.server;
 
 import jakarta.annotation.PostConstruct;
 import org.skvdb.controller.Controller;
+import org.skvdb.network.SocketAcceptor;
 import org.skvdb.security.AuthenticationService;
-import org.skvdb.server.Connection;
-import org.skvdb.server.QueryHandler;
+import org.skvdb.service.ServerStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

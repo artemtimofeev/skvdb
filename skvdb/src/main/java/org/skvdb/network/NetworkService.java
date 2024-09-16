@@ -3,6 +3,7 @@ package org.skvdb.network;
 import org.skvdb.dto.Request;
 import org.skvdb.dto.Result;
 import org.skvdb.exception.NetworkException;
+import org.skvdb.service.DtoConverterService;
 
 import java.io.*;
 import java.net.Socket;
@@ -34,7 +35,7 @@ public class NetworkService {
             } catch (IOException e) {
                 throw new NetworkException(e);
             }
-        } while (!line.substring(line.length() - 4).equals("}end"));
+        } while (!line.endsWith("}end"));
 
         answer.delete(answer.length() - 3, answer.length());
 

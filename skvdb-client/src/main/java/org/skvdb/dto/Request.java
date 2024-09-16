@@ -13,8 +13,6 @@ public class Request {
         this.body = body;
     }
 
-    public Request() {}
-
     private String password;
 
     public String getUsername() {

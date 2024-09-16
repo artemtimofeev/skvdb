@@ -12,6 +12,8 @@ public class Result {
         this.body = body;
     }
 
+    public Result() {}
+
     public RequestResult getRequestResult() {
         return requestResult;
     }
