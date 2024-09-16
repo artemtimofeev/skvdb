@@ -10,24 +10,20 @@ import java.io.IOException;
 import java.util.Base64;
 
 public class DtoConverterService {
-    public static <T extends Dto> String convertToJson(T dto) {
+    public static String convertToJson(Result result) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
-            return ow.writeValueAsString(dto);
+            return ow.writeValueAsString(result);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Dto convertFromEncodedJson(String jsonBody) {
+    public static Request convertFromJson(String networkPacketString) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            NetworkPacket networkPacket = objectMapper.readValue(jsonBody, NetworkPacket.class);
-            return (Dto) objectMapper.readValue(
-                    Base64.getDecoder().decode(networkPacket.encodedJsonBody().getBytes()),
-                    Class.forName(networkPacket.dtoType())
-            );
-        } catch (ClassNotFoundException | IOException e) {
+            return objectMapper.readValue(networkPacketString, Request.class);
+        } catch (IOException e) {
             throw new NetworkException(e);
         }
     }

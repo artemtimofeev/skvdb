@@ -5,10 +5,12 @@ import org.skvdb.dto.AuthenticationResultDto;
 import org.skvdb.dto.Dto;
 import org.skvdb.dto.RequestResult;
 import org.skvdb.util.RandomStringGenerator;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class AuthenticationService {
     private Map<String, String> userToPassword = new HashMap<>();
 

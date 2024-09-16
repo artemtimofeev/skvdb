@@ -5,7 +5,7 @@ import org.skvdb.network.ConnectionFactory;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ConnectionFactory cf = new ConnectionFactory();
 
         cf.setHost("localhost");
@@ -21,6 +21,8 @@ public class Main {
         executor.set("main", "123335", "rrrsfs");
         executor.set("main", "12321", "rrrtgs");*/
         System.out.println(executor.get("main", "123"));
+
+        Thread.sleep(100000);
 
         conn.close();
 
