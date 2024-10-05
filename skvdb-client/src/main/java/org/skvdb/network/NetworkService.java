@@ -1,12 +1,11 @@
 package org.skvdb.network;
 
-import org.skvdb.dto.AuthenticationDto;
-import org.skvdb.dto.Dto;
+import org.skvdb.dto.Request;
+import org.skvdb.dto.Result;
 import org.skvdb.exception.NetworkException;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Base64;
 
 public class NetworkService {
     private Socket clientSocket;
@@ -25,16 +24,10 @@ public class NetworkService {
         }
     }
 
-    public <T extends Dto> Dto send(T dto) {
+    public Result send(Request request) {
         try {
             writer.write(
-                    DtoConverterService.convertToJson(new NetworkPacket(
-                            dto.getClass().getName(),
-                            new String(
-                                    Base64.getEncoder().encode(DtoConverterService.convertToJson(dto).getBytes())
-                                )
-                            )
-                    )
+                    DtoConverterService.convertToJson(request) + "end"
             );
             writer.write("\n");
             writer.flush();
@@ -54,7 +47,7 @@ public class NetworkService {
         }
     }
 
-    private Dto receive() {
+    private Result receive() {
         StringBuilder answer = new StringBuilder();
         String line = "";
         do {
@@ -64,8 +57,10 @@ public class NetworkService {
             } catch (IOException e) {
                 throw new NetworkException(e);
             }
-        } while (line.charAt(line.length() - 1) != '}');
+        } while (!line.endsWith("}end"));
 
-        return DtoConverterService.convertFromEncodedJson(answer.toString());
+        answer.delete(answer.length() - 3, answer.length());
+
+        return DtoConverterService.convertFromJson(answer.toString());
     }
 }
