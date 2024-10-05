@@ -1,10 +1,14 @@
 package org.skvdb.security;
 
-import org.skvdb.dto.AuthenticationDto;
-import org.skvdb.dto.AuthenticationResultDto;
-import org.skvdb.dto.Dto;
-import org.skvdb.dto.RequestResult;
-import org.skvdb.util.RandomStringGenerator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.skvdb.exception.TableAlreadyExistsException;
+import org.skvdb.exception.TableNotFoundException;
+import org.skvdb.exception.UserDoesNotExistsException;
+import org.skvdb.storage.api.Storage;
+import org.skvdb.storage.api.Table;
+import org.skvdb.util.HashUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,40 +16,47 @@ import java.util.Map;
 
 @Service
 public class AuthenticationService {
-    private Map<String, String> userToPassword = new HashMap<>();
+    private Table<Map<String, String>> authenticationData;
 
-    private Map<String, String> tokenToUser = new HashMap<>();
+    private static final Logger logger = LogManager.getLogger();
 
-    public AuthenticationService() {
-        userToPassword.put("user", "password");
+    private static final String DEFAULT_ADMIN_USERNAME = "admin";
+    private static final String DEFAULT_ADMIN_PASSWORD = "password";
+
+    @Autowired
+    public AuthenticationService(Storage storage) {
+        authenticationData = getAuthenticationTable(storage);
     }
 
-    public synchronized AuthenticationResultDto authenticate(AuthenticationDto authenticationDto) {
-        String username = authenticationDto.username();
-        String password = authenticationDto.password();
-        if (isValidPassword(username, password)) {
-            String token = generateToken(username);
-            return new AuthenticationResultDto(RequestResult.OK, token);
+    private Table<Map<String, String>> getAuthenticationTable(Storage storage) {
+        try {
+            return storage.findTableMapByName(AuthenticationDataTable.TABLE_NAME);
+        } catch (TableNotFoundException e) {
+            return createAuthenticationTable(storage);
         }
-        return new AuthenticationResultDto(RequestResult.ERROR, null);
     }
 
-    public synchronized boolean isValidToken(Dto dto) {
-        return isValidToken(dto.token());
+    private Table<Map<String, String>> createAuthenticationTable(Storage storage) {
+        try {
+            Table<Map<String, String>> table = storage.createMapTable(AuthenticationDataTable.TABLE_NAME);
+            setDefaultAdminCredentials(table);
+            return table;
+        } catch (TableAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public synchronized boolean isValidPassword(String username, String password) {
-        return userToPassword.containsKey(username) && userToPassword.get(username).equals(password);
+    private void setDefaultAdminCredentials(Table<Map<String, String>> authenticationData) {
+        authenticationData.set(DEFAULT_ADMIN_USERNAME, new HashMap<>());
+        Map<String, String> mp = authenticationData.get(DEFAULT_ADMIN_USERNAME).value();
+        mp.put(AuthenticationDataTable.PASSWORD_HASH, HashUtil.getEncodedHash(DEFAULT_ADMIN_PASSWORD));
     }
 
-    public synchronized boolean isValidToken(String token) {
-        return tokenToUser.containsKey(token);
-    }
-
-    public synchronized String generateToken(String username) {
-        String token = new RandomStringGenerator().generateRandomString(30);
-        tokenToUser.put(token, username);
-        return token;
+    public String getPasswordHash(String username) throws UserDoesNotExistsException {
+        if (authenticationData.containsKey(username)) {
+            return authenticationData.get(username).value().get(AuthenticationDataTable.PASSWORD_HASH);
+        }
+        throw new UserDoesNotExistsException();
     }
 
 }

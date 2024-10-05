@@ -1,14 +1,13 @@
 package org.skvdb.server;
 
 import jakarta.annotation.PostConstruct;
-import org.skvdb.network.SocketAcceptor;
+import org.skvdb.server.network.ClientSocketService;
+import org.skvdb.server.network.SocketAcceptor;
 import org.skvdb.service.ServerStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
 
 @Component
 public class StopServerListener {
@@ -16,15 +15,15 @@ public class StopServerListener {
     private ServerStatusService serverStatusService;
 
     @Autowired
-    private ConnectionPoolService connectionPoolService;
-
-    @Autowired
-    private ExecutorService connectionListenerExecutor;
+    private ConnectionPool connectionPool;
 
     @Autowired
     private SocketAcceptor socketAcceptor;
 
-    @PostConstruct
+    @Autowired
+    private ClientSocketService clientSocketService;
+
+    //@PostConstruct
     public void init() {
         Scanner scanner = new Scanner(System.in);
         String input = "";
@@ -35,11 +34,8 @@ public class StopServerListener {
         }
 
         serverStatusService.shutdown();
-        connectionPoolService.shutdownNow();
-        connectionListenerExecutor.shutdownNow();
-        try {
-            socketAcceptor.close();
-        } catch (IOException e) {
-        }
+        connectionPool.shutdownNow();
+        clientSocketService.close();
+        socketAcceptor.close();
     }
 }

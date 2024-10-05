@@ -1,5 +1,7 @@
 package org.skvdb.bpp;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.skvdb.annotation.Authentication;
 import org.skvdb.dto.Request;
 import org.skvdb.dto.RequestResult;
@@ -21,6 +23,8 @@ import java.util.Map;
 public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
     private Map<String, Class> controllerMap = new HashMap<>();
     private List<AuthenticationFilter> authenticationFilterlist = new ArrayList<>();
+
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -46,7 +50,7 @@ public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
                     for (AuthenticationFilter authenticationFilter : authenticationFilterlist) {
                         isSuccessfulAuthentication = isSuccessfulAuthentication && authenticationFilter.check(request);
                     }
-                    System.out.println("Аутентификация проведена успешно");
+                    logger.debug("Аутентификация проведена: {}", isSuccessfulAuthentication);
                     if (isSuccessfulAuthentication) {
                         Object retVal = method.invoke(bean, args);
                         return retVal;

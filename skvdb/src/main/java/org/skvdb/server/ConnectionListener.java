@@ -1,16 +1,14 @@
 package org.skvdb.server;
 
 import jakarta.annotation.PostConstruct;
-import org.skvdb.controller.Controller;
-import org.skvdb.network.SocketAcceptor;
-import org.skvdb.security.AuthenticationService;
-import org.skvdb.service.ServerStatusService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.skvdb.server.network.SocketAcceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class ConnectionListener {
@@ -18,38 +16,23 @@ public class ConnectionListener {
     private SocketAcceptor socketAcceptor;
 
     @Autowired
-    private AuthenticationService authenticationService;
+    private ConnectionPool connectionPool;
 
-    @Autowired
-    private QueryHandler queryHandler;
-
-    @Autowired
-    private ServerStatusService serverStatusService;
-
-    @Autowired
-    private ConnectionPoolService connectionPoolService;
-
-    @Autowired
-    private ExecutorService connectionListenerExecutor;
-
-    @Autowired
-    private Controller controller;
+    private static final Logger logger = LogManager.getLogger(ConnectionListener.class);
 
     @PostConstruct
     public void listen() {
+        ExecutorService connectionListenerExecutor = Executors.newSingleThreadExecutor();
         connectionListenerExecutor.submit(() -> {
-            while (serverStatusService.isRunning()) {
-                if (connectionPoolService.hasFreeConnection()) {
-                    Socket socket = null;
-                    try {
-                        socket = socketAcceptor.accept();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    Connection connection = new Connection(authenticationService, socket, queryHandler, serverStatusService, controller);
-                    connectionPoolService.startConnection(connection);
+            while (true) {
+                if (connectionPool.hasFreeConnection()) {
+                    Client client = new Client(socketAcceptor.accept());
+                    logger.debug("Подключается клиент (id={}) с {}", client.getId(), client.getSocket().getRemoteSocketAddress());
+                    connectionPool.createAndStartConnection(client);
                 }
             }
         });
+
+        connectionListenerExecutor.shutdown();
     }
 }

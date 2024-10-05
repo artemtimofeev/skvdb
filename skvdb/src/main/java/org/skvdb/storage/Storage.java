@@ -1,4 +1,4 @@
-package org.skvdb.server;
+package org.skvdb.storage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

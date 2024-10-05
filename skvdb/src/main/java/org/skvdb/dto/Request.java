@@ -5,17 +5,26 @@ import java.util.Map;
 public class Request {
     private String username;
 
-    public Request(String username, String password, String token, String methodName, Map<String, String> body) {
+    public Request(String username, String password, String id, String token, String methodName, Map<String, String> body) {
         this.username = username;
         this.password = password;
         this.token = token;
         this.methodName = methodName;
         this.body = body;
+        this.id = id;
     }
 
-    public Request() {}
-
     private String password;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
 
     public String getUsername() {
         return username;

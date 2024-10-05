@@ -1,5 +1,6 @@
 package org.skvdb.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 @Service

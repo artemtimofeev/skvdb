@@ -1,4 +1,4 @@
-package org.skvdb.server;
+package org.skvdb.storage;
 
 import org.springframework.stereotype.Service;
 
