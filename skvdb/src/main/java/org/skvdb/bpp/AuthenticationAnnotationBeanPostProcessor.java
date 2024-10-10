@@ -3,9 +3,8 @@ package org.skvdb.bpp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.skvdb.annotation.Authentication;
-import org.skvdb.dto.Request;
-import org.skvdb.dto.RequestResult;
-import org.skvdb.dto.Result;
+import org.skvdb.exception.ForbiddenMethodException;
+import org.skvdb.server.network.dto.Request;
 import org.skvdb.security.AuthenticationFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -20,10 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
-    private Map<String, Class> controllerMap = new HashMap<>();
-    private List<AuthenticationFilter> authenticationFilterlist = new ArrayList<>();
-
+public class AuthenticationAnnotationBeanPostProcessor implements BeanPostProcessor {
+    private final Map<String, Class<?>> controllerMap = new HashMap<>();
+    private final List<AuthenticationFilter> authenticationFilterList = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger();
 
     @Override
@@ -33,7 +31,7 @@ public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
             controllerMap.put(beanName, beanClass);
         }
         if (bean instanceof AuthenticationFilter) {
-            authenticationFilterlist.add((AuthenticationFilter) bean);
+            authenticationFilterList.add((AuthenticationFilter) bean);
         }
         return bean;
     }
@@ -47,7 +45,7 @@ public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                     Request request = (Request) args[0];
                     boolean isSuccessfulAuthentication = true;
-                    for (AuthenticationFilter authenticationFilter : authenticationFilterlist) {
+                    for (AuthenticationFilter authenticationFilter : authenticationFilterList) {
                         isSuccessfulAuthentication = isSuccessfulAuthentication && authenticationFilter.check(request);
                     }
                     logger.debug("Аутентификация проведена: {}", isSuccessfulAuthentication);
@@ -55,9 +53,7 @@ public class AuthenticationBeanPostProcessor implements BeanPostProcessor {
                         Object retVal = method.invoke(bean, args);
                         return retVal;
                     }
-                    else {
-                        return new Result(RequestResult.ERROR, null);
-                    }
+                    throw new ForbiddenMethodException();
                 }
             });
         }

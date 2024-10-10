@@ -1,5 +1,7 @@
 package org.skvdb.network;
 
+import org.skvdb.storage.StorageImpl;
+import org.skvdb.storage.api.Storage;
 import org.skvdb.dto.*;
 import org.skvdb.exception.QueryException;
 import org.skvdb.security.AuthenticationService;
@@ -8,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Connection {
-    private String token;
     private String username;
     private String password;
     private AuthenticationService authenticationService;
@@ -19,7 +20,6 @@ public class Connection {
         authenticationService = new AuthenticationService(networkService);
         this.username = username;
         this.password = password;
-        //token = authenticationService.authenticate(username, password);
     }
 
     public Executor createExecutor() {
@@ -31,26 +31,21 @@ public class Connection {
     }
 
     public class Executor {
-        public String get(String tableName, String key) {
-            Map<String, String> body = new HashMap<>();
-            body.put("key", key);
-            Result result = networkService.send(new Request(username, password, token, "get", body));
-            if (result.getRequestResult().equals(RequestResult.OK)) {
-                return result.getBody().get("value");
-            }
-            throw new QueryException("Ошибка во время выполнения запроса");
+        public Storage getStorage() {
+            return new StorageImpl(networkService, username, password);
         }
 
-        public void set(String tableName, String key, String value) {
+        public void createUser(String username1, String password1, boolean isSuperuser) {
             Map<String, String> body = new HashMap<>();
-            body.put("key", key);
-            body.put("value", value);
-            body.put("table", tableName);
-            Result result = networkService.send(new Request(username, password, "token", "set", body));
+            body.put("username", username1);
+            body.put("password", password1);
+            body.put("isSuperuser", String.valueOf(isSuperuser));
+            Request request = new Request(username, password, null, "create_user", body);
+            Result result = networkService.send(request);
             if (result.getRequestResult().equals(RequestResult.OK)) {
                 return;
             }
-            throw new QueryException("Ошибка во время выполнения запроса");
+            throw new RuntimeException();
         }
     }
 }

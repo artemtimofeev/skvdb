@@ -18,8 +18,8 @@ public class TableImpl<Value> implements Table<Value> {
     }
 
     @Override
-    public Entry<Value> get(String key) {
-        return new Entry<>(key, container.get(key));
+    public Value get(String key) {
+        return container.get(key);
     }
 
     @Override
@@ -28,17 +28,7 @@ public class TableImpl<Value> implements Table<Value> {
     }
 
     @Override
-    public void set(Entry<Value> entry) {
-        container.put(entry.key(), entry.value());
-    }
-
-    @Override
     public void delete(String key) {
-
-    }
-
-    @Override
-    public void delete(Entry<Value> entry) {
 
     }
 

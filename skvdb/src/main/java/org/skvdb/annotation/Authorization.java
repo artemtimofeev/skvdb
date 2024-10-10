@@ -1,12 +1,11 @@
 package org.skvdb.annotation;
 
-import java.lang.annotation.ElementType;
+import org.skvdb.security.AuthorityType;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
 public @interface Authorization {
-    String role();
+    AuthorityType authorityType();
 }

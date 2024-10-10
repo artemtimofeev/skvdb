@@ -1,7 +1,7 @@
 package org.skvdb.security;
 
-import org.skvdb.dto.Request;
+import org.skvdb.server.network.dto.Request;
 
 public interface AuthorizationFilter {
-    boolean check(Request request);
+    boolean check(Request request, AuthorityType authorityType);
 }

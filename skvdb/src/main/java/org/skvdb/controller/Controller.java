@@ -1,8 +1,8 @@
 package org.skvdb.controller;
 
-import org.skvdb.dto.Request;
-import org.skvdb.dto.Result;
+import org.skvdb.server.network.dto.Request;
+import org.skvdb.server.network.dto.Result;
 
 public interface Controller {
-    Result get(Request request);
+    Result control(Request request);
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ControllerMappingBeanPostProcessor implements BeanPostProcessor {
+public class ControllerMappingAnnotationBeanPostProcessor implements BeanPostProcessor {
     @Autowired
     private ControllerMappingService controllerMappingService;
 

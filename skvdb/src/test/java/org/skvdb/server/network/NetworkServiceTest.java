@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.skvdb.dto.Request;
-import org.skvdb.dto.RequestResult;
-import org.skvdb.dto.Result;
+import org.skvdb.server.network.dto.Request;
+import org.skvdb.server.network.dto.RequestResult;
+import org.skvdb.server.network.dto.Result;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -2,8 +2,8 @@ package org.skvdb.server.network;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skvdb.dto.Request;
-import org.skvdb.dto.Result;
+import org.skvdb.server.network.dto.Request;
+import org.skvdb.server.network.dto.Result;
 import org.skvdb.exception.ClosedConnectionException;
 import org.skvdb.util.RequestParser;
 import org.skvdb.util.ResultConverter;

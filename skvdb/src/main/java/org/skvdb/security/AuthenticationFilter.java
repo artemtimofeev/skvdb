@@ -1,6 +1,6 @@
 package org.skvdb.security;
 
-import org.skvdb.dto.Request;
+import org.skvdb.server.network.dto.Request;
 
 public interface AuthenticationFilter {
     boolean check(Request request);

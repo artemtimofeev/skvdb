@@ -4,8 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.skvdb.exception.BadRequestException;
 import org.skvdb.controller.Controller;
-import org.skvdb.dto.*;
+import org.skvdb.exception.ControllerNotFoundException;
 import org.skvdb.server.network.NetworkService;
+import org.skvdb.server.network.dto.Request;
+import org.skvdb.server.network.dto.Result;
+import org.skvdb.service.ControllerMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,7 +21,7 @@ import java.lang.reflect.Method;
 @Scope("prototype")
 public class Connection {
     @Autowired
-    private Controller controller;
+    private ControllerMappingService controllerMappingService;
 
     private Client client;
 
@@ -41,9 +44,8 @@ public class Connection {
     private Result resolveRequest(Request request) throws BadRequestException {
         String methodName = request.getMethodName();
         try {
-            Method method = controller.getClass().getMethod(methodName, Request.class);
-            return (Result) method.invoke(controller, request);
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            return controllerMappingService.getController(methodName).control(request);
+        } catch (ControllerNotFoundException e) {
             throw new BadRequestException(e);
         }
     }

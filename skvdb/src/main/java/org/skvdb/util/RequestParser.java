@@ -2,7 +2,7 @@ package org.skvdb.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.skvdb.dto.Request;
+import org.skvdb.server.network.dto.Request;
 
 public class RequestParser {
     public static Request parseFromJson(String networkPacketString) throws JsonProcessingException {

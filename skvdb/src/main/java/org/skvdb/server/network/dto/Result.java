@@ -1,4 +1,4 @@
-package org.skvdb.dto;
+package org.skvdb.server.network.dto;
 
 import java.util.Map;
 
