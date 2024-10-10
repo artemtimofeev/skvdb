@@ -1,7 +1,8 @@
-package org.skvdb.controller;
+package org.skvdb.controller.storage;
 
 import org.skvdb.annotation.Authentication;
 import org.skvdb.annotation.ControllerMapping;
+import org.skvdb.controller.Controller;
 import org.skvdb.exception.TableAlreadyExistsException;
 import org.skvdb.exception.UserNotFoundException;
 import org.skvdb.security.Authority;

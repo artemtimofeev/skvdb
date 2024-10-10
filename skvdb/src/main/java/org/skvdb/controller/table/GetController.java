@@ -1,9 +1,10 @@
-package org.skvdb.controller;
+package org.skvdb.controller.table;
 
 import org.skvdb.annotation.Authentication;
 import org.skvdb.annotation.Authorization;
 import org.skvdb.annotation.ControllerMapping;
 import org.skvdb.annotation.SuperuserController;
+import org.skvdb.controller.Controller;
 import org.skvdb.exception.TableNotFoundException;
 import org.skvdb.security.AuthorityType;
 import org.skvdb.server.network.dto.Request;

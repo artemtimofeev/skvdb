@@ -23,7 +23,7 @@ public class StorageImpl implements Storage {
     @Override
     public <Value> Table<Value> findTableByName(String name, Class<?> valueClass) throws TableNotFoundException {
         Map<String, String> body = new HashMap<>();
-        body.put("name", name);
+        body.put("table", name);
         body.put("valueClass", valueClass.getName());
         Request request = new Request(username, password, null, "find_table_by_name", body);
         Result result = networkService.send(request);

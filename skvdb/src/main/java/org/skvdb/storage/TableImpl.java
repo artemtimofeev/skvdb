@@ -1,6 +1,5 @@
 package org.skvdb.storage;
 
-import org.skvdb.storage.api.Entry;
 import org.skvdb.storage.api.Table;
 import org.skvdb.storage.api.TableMetaData;
 
@@ -29,7 +28,7 @@ public class TableImpl<Value> implements Table<Value> {
 
     @Override
     public void delete(String key) {
-
+        container.remove(key);
     }
 
     @Override

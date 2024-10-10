@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.skvdb.exception.UserAlreadyExistsException;
 import org.skvdb.exception.UserNotFoundException;
 import org.skvdb.security.Authority;
+import org.skvdb.security.AuthorityType;
 import org.skvdb.service.dao.UserDao;
 import org.skvdb.service.dto.User;
 import org.skvdb.util.HashUtil;
@@ -75,6 +76,13 @@ public class UserService {
     public boolean hasAuthority(String username, Authority authority) throws UserNotFoundException {
         User user = userDao.getUser(username);
         return user.authorities().contains(authority);
+    }
+
+    public boolean hasAnyAuthority(String username, String tableName) throws UserNotFoundException {
+        User user = userDao.getUser(username);
+        return user.authorities().contains(new Authority(AuthorityType.READ, tableName))
+                || user.authorities().contains(new Authority(AuthorityType.WRITE, tableName))
+                || user.authorities().contains(new Authority(AuthorityType.OWNER, tableName));
     }
 
 }

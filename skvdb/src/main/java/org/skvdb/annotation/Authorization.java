@@ -7,5 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authorization {
-    AuthorityType authorityType();
+    AuthorityType authorityType() default AuthorityType.OWNER;
+    boolean anyAuthority() default false;
 }

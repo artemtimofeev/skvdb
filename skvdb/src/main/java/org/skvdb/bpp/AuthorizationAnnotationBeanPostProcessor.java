@@ -9,6 +9,7 @@ import org.skvdb.security.AuthorizationFilter;
 import org.skvdb.server.network.dto.Request;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -18,9 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class AuthorizationAnnotationBeanPostProcessor implements BeanPostProcessor {
     private final Map<String, Class<?>> controllerMap = new HashMap<>();
-    private final Map<String, AuthorityType> beanNameToAuthorityType = new HashMap<>();
     private final List<AuthorizationFilter> authorizationFilterList = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger();
 
@@ -28,9 +29,7 @@ public class AuthorizationAnnotationBeanPostProcessor implements BeanPostProcess
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> beanClass = bean.getClass();
         if (beanClass.isAnnotationPresent(Authorization.class)) {
-            AuthorityType authorityType = beanClass.getAnnotation(Authorization.class).authorityType();
             controllerMap.put(beanName, beanClass);
-            beanNameToAuthorityType.put(beanName, authorityType);
         }
         if (bean instanceof AuthorizationFilter) {
             authorizationFilterList.add((AuthorizationFilter) bean);
@@ -41,15 +40,16 @@ public class AuthorizationAnnotationBeanPostProcessor implements BeanPostProcess
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class<?> beanClass = controllerMap.get(beanName);
-        AuthorityType authorityType = beanNameToAuthorityType.get(beanName);
         if (beanClass != null) {
+            AuthorityType authorityType = beanClass.getAnnotation(Authorization.class).authorityType();
+            boolean anyAuthority = beanClass.getAnnotation(Authorization.class).anyAuthority();
             return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                     Request request = (Request) args[0];
                     boolean isSuccessfulAuthorization = true;
                     for (AuthorizationFilter authorizationFilter : authorizationFilterList) {
-                        isSuccessfulAuthorization = isSuccessfulAuthorization && authorizationFilter.check(request, authorityType);
+                        isSuccessfulAuthorization = isSuccessfulAuthorization && authorizationFilter.check(request, authorityType, anyAuthority);
                     }
                     logger.debug("Авторизация проведена: {}", isSuccessfulAuthorization);
                     if (isSuccessfulAuthorization) {
