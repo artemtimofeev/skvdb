@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class ServerConfig {
     @Bean
     public static ServerSettings getServerSettings() {
-        return new ServerSettings(4004, 1);
+        return new ServerSettings(4004, 1, 8080, 100);
     }
 
     @Bean

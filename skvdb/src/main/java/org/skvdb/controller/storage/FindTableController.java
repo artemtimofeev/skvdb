@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Authentication
 @Authorization(anyAuthority = true)
-@ControllerMapping(name = "find_table_by_name")
+@ControllerMapping(name = StorageControllerMapping.FIND_TABLE)
 public class FindTableController implements Controller {
     @Autowired
     private Storage storage;

@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Component
 @Authentication
-@ControllerMapping(name = "create_table")
+@ControllerMapping(name = StorageControllerMapping.CREATE_TABLE)
 public class CreateTableController implements Controller {
     @Autowired
     private Storage storage;

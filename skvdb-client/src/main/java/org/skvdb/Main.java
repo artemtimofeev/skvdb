@@ -2,7 +2,6 @@ package org.skvdb;
 
 import org.skvdb.network.Connection;
 import org.skvdb.network.ConnectionFactory;
-import org.skvdb.storage.TableImpl;
 import org.skvdb.storage.api.Storage;
 import org.skvdb.storage.api.Table;
 import org.skvdb.storage.api.TableAlreadyExistsException;
