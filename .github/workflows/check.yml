@@ -17,5 +17,7 @@ jobs:
          sudo apt install maven
       - name: Run tests
         run: |
-         cd skvdb
+	 cd skvdb-api-spec
+	 mvn install
+	 cd ../skvdb
          mvn test
