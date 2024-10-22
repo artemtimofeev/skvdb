@@ -1,6 +1,6 @@
 package org.skvdb.annotation;
 
-import org.skvdb.security.AuthorityType;
+import org.skvdb.common.security.AuthorityType;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

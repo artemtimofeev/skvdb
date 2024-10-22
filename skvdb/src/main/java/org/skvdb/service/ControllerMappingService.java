@@ -1,6 +1,5 @@
 package org.skvdb.service;
 
-import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.skvdb.controller.Controller;
@@ -18,6 +17,7 @@ public class ControllerMappingService {
     private final ConcurrentHashMap<String, String> methodNameToBeanName = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Controller> methodNameToBean = new ConcurrentHashMap<>();
     private volatile AtomicBoolean isInitialized = new AtomicBoolean(false);
+
     @Autowired
     private ApplicationContext applicationContext;
 

@@ -1,10 +1,14 @@
 package org.skvdb.storage;
 
+import org.skvdb.common.exception.TableAlreadyExistsException;
+import org.skvdb.common.exception.TableNotFoundException;
+import org.skvdb.common.storage.Storage;
+import org.skvdb.common.storage.Table;
+import org.skvdb.common.storage.TableMetaData;
 import org.skvdb.dto.Request;
 import org.skvdb.dto.RequestResult;
 import org.skvdb.dto.Result;
 import org.skvdb.network.NetworkService;
-import org.skvdb.storage.api.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +18,7 @@ public class StorageImpl implements Storage {
     private final String username;
     private final String password;
 
-    public StorageImpl(NetworkService networkService, String username, String password) {
+    public StorageImpl(String username, String password, NetworkService networkService) {
         this.networkService = networkService;
         this.username = username;
         this.password = password;

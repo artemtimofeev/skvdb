@@ -2,9 +2,11 @@ package org.skvdb.security;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.skvdb.exception.UserNotFoundException;
+import org.skvdb.common.exception.UserNotFoundException;
+import org.skvdb.common.security.Authority;
+import org.skvdb.common.security.AuthorityType;
+import org.skvdb.common.service.UserService;
 import org.skvdb.server.network.dto.Request;
-import org.skvdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

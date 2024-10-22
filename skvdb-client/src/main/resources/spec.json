@@ -1,0 +1,16 @@
+{
+  "userService": {
+    "getAllUsers": {
+      "requires": {},
+      "returns": {}
+    },
+    "createUser": {
+      "requires": {
+        "username": "String",
+        "password": "String",
+        "isSuperuser": "boolean"
+      },
+      "returns": {}
+    }
+  }
+}

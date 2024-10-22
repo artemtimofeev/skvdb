@@ -3,14 +3,13 @@ package org.skvdb.storage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.skvdb.common.storage.Table;
+import org.skvdb.common.storage.TableMetaData;
 import org.skvdb.dto.Request;
 import org.skvdb.dto.RequestResult;
 import org.skvdb.dto.Result;
 import org.skvdb.exception.NetworkException;
 import org.skvdb.network.NetworkService;
-import org.skvdb.storage.api.Entry;
-import org.skvdb.storage.api.Table;
-import org.skvdb.storage.api.TableMetaData;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,15 +30,14 @@ public class TableImpl<Value> implements Table<Value> {
     }
 
     @Override
-    public Entry<Value> get(String key) {
+    public Value get(String key) {
         Map<String, String> body = new HashMap<>();
         body.put("key", key);
         body.put("table", tableMetaData.name());
         Request request = new Request(username, password, null, "get", body);
         Result result = networkService.send(request);
         if (result.getRequestResult().equals(RequestResult.OK)) {
-            Value value = convertFromJson(result.getBody().get("value"));
-            return new Entry<>(key, value);
+            return convertFromJson(result.getBody().get("value"));
         }
         throw new RuntimeException();
     }
@@ -77,17 +75,7 @@ public class TableImpl<Value> implements Table<Value> {
     }
 
     @Override
-    public void set(Entry<Value> entry) {
-
-    }
-
-    @Override
     public void delete(String key) {
-
-    }
-
-    @Override
-    public void delete(Entry<Value> entry) {
 
     }
 

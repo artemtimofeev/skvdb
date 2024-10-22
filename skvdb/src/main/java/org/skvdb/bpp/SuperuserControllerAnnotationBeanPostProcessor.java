@@ -1,10 +1,10 @@
 package org.skvdb.bpp;
 
 import org.skvdb.annotation.SuperuserController;
+import org.skvdb.common.service.UserService;
 import org.skvdb.controller.Controller;
 import org.skvdb.exception.ForbiddenMethodException;
 import org.skvdb.server.network.dto.Request;
-import org.skvdb.service.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;

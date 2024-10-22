@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.skvdb.annotation.Authorization;
 import org.skvdb.exception.ForbiddenMethodException;
-import org.skvdb.security.AuthorityType;
+import org.skvdb.common.security.AuthorityType;
 import org.skvdb.security.AuthorizationFilter;
 import org.skvdb.server.network.dto.Request;
 import org.springframework.beans.BeansException;

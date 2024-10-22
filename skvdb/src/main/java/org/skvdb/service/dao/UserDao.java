@@ -1,13 +1,13 @@
 package org.skvdb.service.dao;
 
+import org.skvdb.common.dto.User;
+import org.skvdb.common.exception.TableAlreadyExistsException;
+import org.skvdb.common.exception.TableNotFoundException;
 import org.skvdb.configuration.settings.SecuritySettings;
-import org.skvdb.exception.TableAlreadyExistsException;
-import org.skvdb.exception.TableNotFoundException;
-import org.skvdb.exception.UserAlreadyExistsException;
-import org.skvdb.exception.UserNotFoundException;
-import org.skvdb.service.dto.User;
-import org.skvdb.storage.api.Storage;
-import org.skvdb.storage.api.Table;
+import org.skvdb.common.exception.UserAlreadyExistsException;
+import org.skvdb.common.exception.UserNotFoundException;
+import org.skvdb.common.storage.Storage;
+import org.skvdb.common.storage.Table;
 import org.skvdb.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,6 +50,7 @@ public class UserDao {
         User defaultSuperuser = new User(
                 securitySettings.defaultAdminUsername(),
                 HashUtil.getEncodedHash(securitySettings.defaultAdminPassword()),
+                true,
                 true,
                 new HashSet<>()
                 );

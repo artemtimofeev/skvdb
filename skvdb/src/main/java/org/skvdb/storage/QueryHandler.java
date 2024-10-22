@@ -8,10 +8,10 @@ import java.util.Map;
 public class QueryHandler {
     private Map<String, String> container;
 
-    private Storage storage;
+    private Storage1 storage;
 
     public QueryHandler() {
-        storage = new Storage();
+        storage = new Storage1();
         container = storage.readFromDisk();
         storage.initWriter();
         storage.dumpToStorage(container);

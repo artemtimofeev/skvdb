@@ -3,12 +3,12 @@ package org.skvdb.controller.user;
 import org.skvdb.annotation.Authentication;
 import org.skvdb.annotation.ControllerMapping;
 import org.skvdb.annotation.SuperuserController;
+import org.skvdb.common.service.UserService;
 import org.skvdb.controller.Controller;
-import org.skvdb.exception.UserAlreadyExistsException;
+import org.skvdb.common.exception.UserAlreadyExistsException;
 import org.skvdb.server.network.dto.Request;
 import org.skvdb.server.network.dto.RequestResult;
 import org.skvdb.server.network.dto.Result;
-import org.skvdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,19 +23,9 @@ public class CreateUserController implements Controller {
     private UserService userService;
 
     @Override
-    public Result control(Request request) {
+    public Result control(Request request) throws UserAlreadyExistsException {
         Map<String, String> body = request.getBody();
-        String username = body.get("username");
-        String password = body.get("password");
-        boolean isSuperuser = Boolean.parseBoolean(body.get("isSuperuser"));
-        if (username == null || password == null) {
-            return new Result(RequestResult.ERROR, null);
-        }
-        try {
-            userService.createUser(username, password, isSuperuser);
-            return new Result(RequestResult.OK, null);
-        } catch (UserAlreadyExistsException e) {
-            return new Result(RequestResult.ERROR, null);
-        }
+        userService.createUser(body.get("username"), body.get("password"), Boolean.parseBoolean(body.get("isSuperuser")));
+        return new Result(RequestResult.OK, null);
     }
 }

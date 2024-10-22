@@ -45,7 +45,7 @@ public class Connection {
         String methodName = request.getMethodName();
         try {
             return controllerMappingService.getController(methodName).control(request);
-        } catch (ControllerNotFoundException e) {
+        } catch (Exception e) {
             throw new BadRequestException(e);
         }
     }

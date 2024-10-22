@@ -1,10 +1,10 @@
 package org.skvdb.storage;
 
-import org.skvdb.exception.TableAlreadyExistsException;
-import org.skvdb.exception.TableNotFoundException;
-import org.skvdb.storage.api.Storage;
-import org.skvdb.storage.api.Table;
-import org.skvdb.storage.api.TableMetaData;
+import org.skvdb.common.exception.TableAlreadyExistsException;
+import org.skvdb.common.exception.TableNotFoundException;
+import org.skvdb.common.storage.Storage;
+import org.skvdb.common.storage.Table;
+import org.skvdb.common.storage.TableMetaData;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

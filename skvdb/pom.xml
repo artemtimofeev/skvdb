@@ -72,6 +72,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.skvdb</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 
     </dependencies>
 

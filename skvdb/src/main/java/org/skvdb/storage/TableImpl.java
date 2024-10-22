@@ -1,7 +1,7 @@
 package org.skvdb.storage;
 
-import org.skvdb.storage.api.Table;
-import org.skvdb.storage.api.TableMetaData;
+import org.skvdb.common.storage.Table;
+import org.skvdb.common.storage.TableMetaData;
 
 import java.util.Map;
 import java.util.TreeMap;
