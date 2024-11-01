@@ -1,13 +1,36 @@
 import {Button, Table} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DeleteUserModal from "../modals/user/DeleteUserModal";
 import CreateUserModal from "../modals/user/CreateUserModal";
 import ManagePermissionsUserModal from "../modals/user/ManagePermissionsUserModal";
+import GetAllUsersRequest from "../../api/users/GetAllUsersRequest";
+import GetAllTablesRequest from "../../api/tables/GetAllTablesRequest";
+import {useParams} from "react-router-dom";
 
 function Users() {
     const [showDelete, setShowDelete] = useState(false);
     const [showCreate, setShowCreate] = useState(false);
     const [showPermissions, setShowPermissions] = useState(false);
+    const [username, setUsername] = useState('');
+    const [users, setUsers] = useState([]);
+
+    const {instanceId} = useParams();
+
+    useEffect(()=>{
+        GetAllUsersRequest(instanceId).then(response => {
+            setUsers(response.result);
+        })
+    }, [instanceId]);
+
+    const [tables, setTables]= useState([]);
+
+    useEffect(() => {
+        GetAllTablesRequest(instanceId).then(
+            response => {
+                setTables(response.result);
+            }
+        )
+    }, [instanceId]);
 
     return <>
         <Table striped bordered hover>
@@ -20,15 +43,25 @@ function Users() {
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>admin</td>
-                <td>Table [] : OWNER, READ, WRITE</td>
-                <td>true</td>
-                <td>
-                    <Button variant="outline-danger" onClick={() => setShowDelete(true)}>Delete user</Button>{' '}
-                    <Button variant="outline-primary" onClick={()=> setShowPermissions(true)}>Manage permissions</Button>{' '}
-                </td>
-            </tr>
+            {
+                users.map((user, index) => {
+                    return <tr>
+                        <td>{user.name}</td>
+                        <td>{user.permissions}</td>
+                        <td>{user.isSuperuser}</td>
+                        <td>
+                            <Button variant="outline-danger" onClick={() => {
+                                setShowDelete(true);
+                                setUsername(user.name);}}
+                            >Delete user</Button>{' '}
+                            <Button variant="outline-primary" onClick={() => {
+                                setShowPermissions(true);
+                                setUsername(user.name)}}
+                            >Manage permissions</Button>{' '}
+                        </td>
+                    </tr>
+                })
+            }
             </tbody>
         </Table>
 
@@ -36,9 +69,9 @@ function Users() {
             <Button variant="outline-primary" className="mt-2" onClick={()=> setShowCreate(true)}>Create new user</Button>
         </div>
 
-        <DeleteUserModal showDelete={showDelete} setShowDelete={setShowDelete}/>
+        <DeleteUserModal showDelete={showDelete} setShowDelete={setShowDelete} username={username}/>
         <CreateUserModal showCreate={showCreate} setShowCreate={setShowCreate}/>
-        <ManagePermissionsUserModal showPermissions={showPermissions} setShowPermissions={setShowPermissions}/>
+        <ManagePermissionsUserModal showPermissions={showPermissions} setShowPermissions={setShowPermissions} username={username} tables={tables}/>
     </>;
 }
 

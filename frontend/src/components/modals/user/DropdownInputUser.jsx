@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import {Dropdown, Form, InputGroup} from "react-bootstrap";
 
-function DropdownInputUser() {
-    const [inputValue, setInputValue] = useState('');
+function DropdownInputUser({inputValue, setInputValue, tables}) {
     const [showDropdown, setShowDropdown] = useState(false);
-    const options = ['Option 1', 'Option 2', 'Option 3'];
+    const options = tables.map((table, index) => {return table.name});
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);

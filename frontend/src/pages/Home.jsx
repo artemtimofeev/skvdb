@@ -46,7 +46,7 @@ A table:
 ### Пример подключения со стороны клиента
 `
     return <>
-        <Header isLoggedIn={true}/>
+        <Header/>
         <Container className="mt-4">
             <ReactMarkdown children={markdown} remarkPlugins={[remarkGfm]}></ReactMarkdown>
             <MyCoolCodeBlock code={text} language={"java"} showLineNumbers={100}></MyCoolCodeBlock>

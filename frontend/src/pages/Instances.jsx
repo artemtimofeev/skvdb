@@ -1,8 +1,24 @@
 import Header from "../components/Header";
 import {Button, Container, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import CreateNewInstanceModal from "../components/modals/CreateNewInstanceModal";
+import {useEffect, useState} from "react";
+import GetAllInstancesRequest from "../api/instances/GetAllInstancesRequest";
 
 function Instances() {
+    const [showCreate, setShowCreate] = useState(false);
+    const [instances, setInstances] = useState([]);
+
+    useEffect(() => {
+        GetAllInstancesRequest().then(
+            response => {
+                console.log(response)
+                setInstances(response.instances);
+            }
+        ).catch(error => {
+            console.log(error)
+        })
+    }, []);
 
     return <>
         <Header/>
@@ -14,21 +30,31 @@ function Instances() {
                     <th>name</th>
                     <th>ip</th>
                     <th>port</th>
+                    <th>status</th>
+                    <th>rate</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><Link to='/instance/1'>test-instance</Link></td>
-                    <td>192.168.1.1</td>
-                    <td>4040</td>
-                </tr>
+                {
+                    instances.map((instance, index) => {
+                        return <tr>
+                            <td>{instance.id}</td>
+                            <td><Link to={'/instance/' + instance.id + '/'}>{instance.name}</Link></td>
+                            <td>{instance.ip}</td>
+                            <td>{instance.port}</td>
+                            <td>{instance.status}</td>
+                            <td>{instance.rate}</td>
+                        </tr>
+                    })
+                }
                 </tbody>
             </Table>
 
             <div className="d-flex justify-content-center">
-                <Button variant="outline-primary" className="mt-2">Create new instance</Button>
+                <Button variant="outline-primary" className="mt-2" onClick={() => setShowCreate(true)}>Create new instance</Button>
             </div>
+
+            <CreateNewInstanceModal showCreate={showCreate} setShowCreate={setShowCreate}/>
         </Container>
     </>;
 }

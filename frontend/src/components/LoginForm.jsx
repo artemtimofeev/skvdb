@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import Login from "../api/Login";
+import LoginRequest from "../api/authentication/LoginRequest";
 import {Alert, Button, Card, Form, Spinner} from "react-bootstrap";
+import SetToken from "../storage/SetToken";
 
 const LoginForm = () => {
     const [formData, setFormData] = useState({
@@ -9,15 +10,16 @@ const LoginForm = () => {
         password: ''
     });
 
-    const [loginTried, setLoginTried] = useState(false);
-    const [redirect1, setRedirect] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [redirect, setRedirect] = useState(false);
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
-        if (redirect1) {
+        if (redirect) {
             navigate("/");
         }
-    }, [redirect1, navigate]);
+    }, [redirect, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -29,15 +31,18 @@ const LoginForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setLoginTried(true);
+        setLoading(true);
         console.log('Данные формы:', formData);
-        Login( 'POST', formData)
-            .then(data => {
-                console.log('Success:', data);
-                setRedirect(true);
+        LoginRequest(formData.username, formData.password)
+            .then(response => {
+                SetToken(response.token);
+                console.log('Success:', response);
+                setTimeout(() => setRedirect(true), 100);
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message);
+                setLoading(false);
             });
     };
 
@@ -58,11 +63,11 @@ const LoginForm = () => {
                         </Form.Group>
 
                         <Button variant="primary" type="submit" className="w-100 mt-4">
-                            {loginTried ? <Spinner animation="border" size="sm"/> : "Войти"}
+                            {loading ? <Spinner animation="border" size="sm"/> : "Войти"}
                         </Button>
                     </Form>
-                    {loginTried ? <Alert variant="danger" className="mt-4">
-                        This is a alert—check it out!
+                    {errorMessage !== "" ? <Alert variant="danger" className="mt-4">
+                        {errorMessage}
                     </Alert> : ""}
                 </Card.Body>
             </Card>

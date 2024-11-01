@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { Form, Button, Card } from 'react-bootstrap';
+import {Form, Button, Card, Alert} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Signup from "../api/Signup";
+import SignupRequest from "../api/authentication/SignupRequest";
 import { useNavigate } from "react-router-dom";
+import SetToken from "../storage/SetToken";
 
 
 const SignupForm = () => {
@@ -13,6 +14,7 @@ const SignupForm = () => {
 
     const [redirect1, setRedirect] = useState(false);
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         if (redirect1) {
@@ -31,14 +33,15 @@ const SignupForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Данные формы:', formData);
-        Signup( 'POST', formData)
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        setRedirect(true);
+        SignupRequest(formData.username, formData.password)
+            .then(response => {
+                SetToken(response.token);
+                console.log('Success:', response);
+                setTimeout(() => setRedirect(true), 100);
+            }).catch(error => {
+            console.error('Error:', error);
+            setErrorMessage(error.message);
+        });
     };
 
     return (
@@ -61,6 +64,9 @@ const SignupForm = () => {
                             Зарегистрироваться
                         </Button>
                     </Form>
+                    {errorMessage !== "" ? <Alert variant="danger" className="mt-4">
+                        {errorMessage}
+                    </Alert> : ""}
                 </Card.Body>
             </Card>
         </div>
