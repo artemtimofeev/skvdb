@@ -25,6 +25,8 @@ function CreateNewInstanceModal({showCreate, setShowCreate}){
         });
     };
 
+    const [errorMessage, setErrorMessage] = useState("")
+
     const handleSubmit = (e) => {
         e.preventDefault();
         CreateNewInstanceRequest( formData.instanceName)
@@ -34,6 +36,7 @@ function CreateNewInstanceModal({showCreate, setShowCreate}){
             })
             .catch(error => {
                 console.error('Error:', error);
+                setErrorMessage(error.message)
             });
     };
 
@@ -47,9 +50,9 @@ function CreateNewInstanceModal({showCreate, setShowCreate}){
                     <Form.Label>Instance name</Form.Label>
                     <Form.Control required name="instanceName" value={formData.instanceName} onChange={handleChange}/>
                 </Form.Group>
-                <Alert key="danger" variant="danger">
-                    Error
-                </Alert>
+                {errorMessage !== "" ? <Alert key="danger" variant="danger">
+                    {errorMessage}
+                </Alert> : ""}
             </Modal.Body>
             <Modal.Footer>
                 <Button type="submit" variant="outline-primary">

@@ -13,7 +13,7 @@ import (
 )
 
 type InstanceGetter interface {
-	GetAllInstances(username string) ([]dto.Instance, error)
+	GetAllInstancesByUsername(username string) ([]dto.Instance, error)
 }
 
 type Response struct {
@@ -38,7 +38,7 @@ func NewGet(log *slog.Logger, instanceGetter InstanceGetter) http.HandlerFunc {
 			return
 		}
 
-		instances, err := instanceGetter.GetAllInstances(username)
+		instances, err := instanceGetter.GetAllInstancesByUsername(username)
 		if errors.Is(err, storage.ErrUsernameNotFound) {
 			log.Info("username not found", slog.String("username", username))
 
@@ -54,25 +54,9 @@ func NewGet(log *slog.Logger, instanceGetter InstanceGetter) http.HandlerFunc {
 			return
 		}
 
-		responseOK(w, r, instances)
-	}
-}
-
-func responseOK(w http.ResponseWriter, r *http.Request, instances []dto.Instance) {
-	render.JSON(w, r, Response{
-		Response:  response.OK(),
-		Instances: instances,
-	})
-}
-
-func NewDelete(log *slog.Logger) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		//instanceId := chi.URLParam(r, "instanceId")
-	}
-}
-
-func NewPost(log *slog.Logger) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
+		render.JSON(w, r, Response{
+			Response:  response.OK(),
+			Instances: instances,
+		})
 	}
 }

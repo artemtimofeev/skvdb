@@ -39,11 +39,12 @@ func New() (*Storage, error) {
 	CREATE TABLE IF NOT EXISTS instances (
 	    id SERIAL PRIMARY KEY ,
 	    user_id INT,
+	    server_id VARCHAR(255) NOT NULL,
 	    instance_name VARCHAR(255) NOT NULL,
 	    ip VARCHAR(255),
 	    port VARCHAR(255),
 	    status VARCHAR(255) NOT NULL,
-	    rate VARCHAR(255) NOT NULL,
+	    rate INT NOT NULL,
 	    FOREIGN KEY (user_id) REFERENCES users(id));
 	`)
 	if err != nil {

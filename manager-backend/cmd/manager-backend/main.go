@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/cors"
 	"log/slog"
 	"manager-backend/internal/config"
+	"manager-backend/internal/daemon"
 	"manager-backend/internal/lib/logger"
 	"manager-backend/internal/rest/api/balance"
 	"manager-backend/internal/rest/api/billing"
@@ -21,6 +22,7 @@ import (
 	"manager-backend/internal/storage/postgres"
 	"net/http"
 	"os"
+	"time"
 )
 
 const (
@@ -30,11 +32,12 @@ const (
 )
 
 func main() {
-	server.Create()
 
 	cfg := config.MustLoad()
 
 	log := setupLogger(cfg.Env)
+
+	cloud := *server.NewCloud(cfg.YandexPassportOAuthToken)
 
 	log.Info("starting kvdb backend")
 
@@ -43,6 +46,10 @@ func main() {
 		log.Error("failed to init storage", logger.Err(err))
 		os.Exit(1)
 	}
+
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+	go daemon.Initializer(log, storage, ticker, cloud)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -63,7 +70,7 @@ func main() {
 
 	r.Get("/api/instance/{instanceId}/operation", operation.NewGet(log))
 
-	r.Delete("/api/instance/{instanceId}", instance.NewDelete(log))
+	r.Delete("/api/instance/{instanceId}", instance.NewDelete(log, cloud, storage))
 
 	r.Get("/api/instance/{instanceId}/table", table.NewGet(log))
 
@@ -79,7 +86,7 @@ func main() {
 
 	r.Get("/api/instance/{instanceId}/user", user.NewGet(log))
 
-	r.Post("/api/instance", instance.NewPost(log))
+	r.Post("/api/instance", instance.NewPost(log, cloud, storage))
 
 	r.Get("/api/instance", instance.NewGet(log, storage))
 

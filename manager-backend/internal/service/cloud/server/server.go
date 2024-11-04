@@ -1,9 +1,21 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 )
+
+type CreateServerResponse struct {
+	Id       string `json:"id"`
+	Metadata struct {
+		InstanceId string `json:"instanceId"`
+	} `json:"metadata"`
+	Code int `json:"code"`
+}
 
 type CreateServerRequest struct {
 	FolderId              string `json:"folderId"`
@@ -44,15 +56,29 @@ type CreateServerRequest struct {
 	OsLoginEnabled bool `json:"osLoginEnabled"`
 	BootDiskSpec   struct {
 		AutoDelete bool `json:"autoDelete"`
-		diskSpec   struct {
+		DiskSpec   struct {
 			Size    int    `json:"size"`
 			TypeId  string `json:"typeId"`
 			ImageId string `json:"imageId"`
-		}
+		} `json:"diskSpec"`
 	} `json:"bootDiskSpec"`
+	SecondaryDiskSpecs []string `json:"secondaryDiskSpecs"`
+	Metadata           struct {
+		UserData            string `json:"user-data"`
+		SshKeys             string `json:"ssh-keys"`
+		SerialPortEnable    string `json:"serial-port-enable"`
+		InstallUnifiedAgent string `json:"install-unified-agent"`
+	} `json:"metadata"`
 }
 
-func Create() {
+var (
+	ErrQuotaExceeded        = errors.New("quota exceeded")
+	ErrAuthenticationFailed = errors.New("authentication failed")
+)
+
+func (C *Cloud) CreateInstance() (string, error) {
+	const op = "service.cloud.server.CreateInstance"
+
 	data := CreateServerRequest{
 		FolderId: "b1gru2r0l5r64dmbui4d",
 		NetworkInterfaceSpecs: struct {
@@ -104,20 +130,90 @@ func Create() {
 		OsLoginEnabled: false,
 		BootDiskSpec: struct {
 			AutoDelete bool `json:"autoDelete"`
-			diskSpec   struct {
+			DiskSpec   struct {
 				Size    int    `json:"size"`
 				TypeId  string `json:"typeId"`
 				ImageId string `json:"imageId"`
-			}
-		}{AutoDelete: true, diskSpec: struct {
+			} `json:"diskSpec"`
+		}{AutoDelete: true, DiskSpec: struct {
 			Size    int    `json:"size"`
 			TypeId  string `json:"typeId"`
 			ImageId string `json:"imageId"`
 		}{Size: 21474836480, TypeId: "network-hdd", ImageId: "fd8tvc3529h2cpjvpkr5"}},
+		SecondaryDiskSpecs: make([]string, 0),
+		Metadata: struct {
+			UserData            string `json:"user-data"`
+			SshKeys             string `json:"ssh-keys"`
+			SerialPortEnable    string `json:"serial-port-enable"`
+			InstallUnifiedAgent string `json:"install-unified-agent"`
+		}{UserData: "#cloud-config\ndatasource:\n Ec2:\n  strict_id: false\nssh_pwauth: no\nusers:\n- name: admin\n  sudo: ALL=(ALL) NOPASSWD:ALL\n  shell: /bin/bash\n  ssh_authorized_keys:\n  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCIsca91fTmqGI8C3BmNXVJyRV/XlcVjwAe/OMVFgosd79I9M2y1+Jgf00ICDXR6OQxBbS6SOeNfwqpkoX6Tv2xSMJuh30Xw41W2qs9na223p2LX+CXjuNSpbz4xk7gY1JqgVQQ9Ys/+wUMU+WhXStSwCjyZj29TddfccxU0tYaI3ppiZDAiVD4jCkFta5G7i/rlTc+sq30gpP4voXTzA8xgaqFq6u6+ppUof5mWg5+xAW9RZ/pLqHMb5z69gTReUEYXubWQu06m1rAaUR5A43xjU6gPvwp27GX0f1PtHkEY5JxykBfVb4v2xEcIaV6iRSGQSTnT8SWdBiT1Q6g7xb1 rsa-key-20241016", SshKeys: "admin:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCIsca91fTmqGI8C3BmNXVJyRV/XlcVjwAe/OMVFgosd79I9M2y1+Jgf00ICDXR6OQxBbS6SOeNfwqpkoX6Tv2xSMJuh30Xw41W2qs9na223p2LX+CXjuNSpbz4xk7gY1JqgVQQ9Ys/+wUMU+WhXStSwCjyZj29TddfccxU0tYaI3ppiZDAiVD4jCkFta5G7i/rlTc+sq30gpP4voXTzA8xgaqFq6u6+ppUof5mWg5+xAW9RZ/pLqHMb5z69gTReUEYXubWQu06m1rAaUR5A43xjU6gPvwp27GX0f1PtHkEY5JxykBfVb4v2xEcIaV6iRSGQSTnT8SWdBiT1Q6g7xb1 rsa-key-20241016", SerialPortEnable: "0", InstallUnifiedAgent: "0"},
 	}
 	jsonData, err := json.Marshal(data)
 	if err != nil {
-		panic(err)
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
 	}
-	fmt.Println(string(jsonData))
+
+	Token, err := C.GetToken()
+	if err != nil {
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
+	}
+
+	req, err := http.NewRequest("POST", "https://compute.api.cloud.yandex.net/compute/v1/instances", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", Token.IamToken))
+
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
+	}
+
+	var resp CreateServerResponse
+	err = json.Unmarshal(body, &resp)
+	if err != nil {
+		return "", fmt.Errorf("%s: create new server: %w", op, err)
+	}
+	if resp.Code == 8 {
+		return "", ErrQuotaExceeded
+	}
+	if resp.Code == 16 {
+		return "", ErrAuthenticationFailed
+	}
+
+	return resp.Metadata.InstanceId, nil
+}
+
+func (C *Cloud) DeleteInstance(id string) error {
+	const op = "service.cloud.server.DeleteInstance"
+
+	Token, err := C.GetToken()
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("https://compute.api.cloud.yandex.net/compute/v1/instances/%s", id), nil)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", Token.IamToken))
+
+	client := &http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	return nil
 }

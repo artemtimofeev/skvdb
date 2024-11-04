@@ -14,8 +14,8 @@ public class Main {
 
         cf.setHost("localhost");
         cf.setPort(4004);
-        cf.setUsername("kek");
-        cf.setPassword("lol");
+        cf.setUsername("admin");
+        cf.setPassword("password");
 
         Connection conn = cf.createConnection();
 
@@ -23,8 +23,9 @@ public class Main {
         //create user
         //executor.createUser("user", "password", false);
         Storage storage = executor.getStorage();
-        Table<String> table = storage.findTableByName("test", String.class);
-        //table.set("123", "test");
+        Table<String> table = storage.createTable("test", String.class);
+        //Table<String> table = storage.findTableByName("test", String.class);
+        table.set("1", "test");
 
         System.out.println(table.get("1"));
 

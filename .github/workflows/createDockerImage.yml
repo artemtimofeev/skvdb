@@ -1,0 +1,44 @@
+name: Build and Deploy
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '20'
+      - name: Install Maven
+        run: |
+          sudo apt update
+          sudo apt install maven
+      - name: Build
+        run: |
+          cd skvdb-api-spec
+          mvn install
+          cd ../skvdb
+          mvn clean package
+      - name: Build Docker image
+        run: |
+          docker build -t skvdb .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker image
+        run: |
+          docker tag skvdb:latest ${{ secrets.DOCKER_USERNAME }}/skvdb:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/skvdb:latest
+
+
+
+
+
+
+

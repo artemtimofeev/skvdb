@@ -23,7 +23,7 @@ function DeleteInstanceModal({show, setShow}) {
         <Modal.Footer>
             <Button variant="outline-danger" onClick={() => {
                 DeleteInstanceRequest(instanceId).then(response => {
-                    if (response.result === "ok") {
+                    if (response.result === "OK") {
                         setRedirect(true);
                     }
                 })
