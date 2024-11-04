@@ -21,8 +21,10 @@ jobs:
           mvn install
           cd ../skvdb
           mvn clean package
+          
       - name: Build Docker image
         run: |
+          cd skvdb
           docker build -t skvdb .
 
       - name: Log in to Docker Hub
