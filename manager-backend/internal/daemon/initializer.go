@@ -42,9 +42,16 @@ func Initializer(log *slog.Logger, storage *postgres.Storage, ticker *time.Ticke
 							continue
 						}
 
+						err = server.InstallSkvdb(ip)
+						if err != nil {
+							log.Error(fmt.Sprintf("Error installing instance %s ip %s", serverInstance.Id, ip), logger.Err(err))
+							continue
+						}
+
 						instance.Status = "RUNNING"
 						instance.Ip = ip
-						instance.Port = "4040"
+						instance.Port = "4004"
+						instance.PaidTill = time.Now()
 
 						err := storage.UpdateInstance(instance)
 						if err != nil {

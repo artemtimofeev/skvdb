@@ -51,6 +51,10 @@ func main() {
 	defer ticker.Stop()
 	go daemon.Initializer(log, storage, ticker, cloud)
 
+	ticker2 := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	go daemon.Biller(log, storage, ticker2, cloud)
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(cors.Handler(cors.Options{
@@ -62,7 +66,7 @@ func main() {
 		MaxAge:           300, // Maximum value not ignored by any browser
 	}))
 
-	r.Post("/api/signup", signup.NewPost(log, storage))
+	r.Post("/api/signup", signup.NewPost(log, storage, storage))
 
 	r.Post("/api/login", login.NewPost(log, storage))
 
@@ -90,9 +94,9 @@ func main() {
 
 	r.Get("/api/instance", instance.NewGet(log, storage))
 
-	r.Get("/api/balance", balance.NewGet(log))
+	r.Get("/api/balance", balance.NewGet(log, storage))
 
-	r.Get("/api/billing", billing.NewGet(log))
+	r.Get("/api/billing", billing.NewGet(log, storage))
 
 	http.ListenAndServe(":3001", r)
 }

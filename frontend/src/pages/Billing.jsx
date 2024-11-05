@@ -11,14 +11,14 @@ function Billing() {
     useEffect(() => {
         GetBalance().then(
             response => {
-                setBalance(response.result);
+                setBalance(response.balance);
             }
-        )
+        ).catch((error) => {console.log(error)})
         GetAllBills().then(
             response => {
-                setBills(response.result);
+                setBills(response.transactions);
             }
-        )
+        ).catch((error) => {console.log(error)})
     }, []);
     return <>
         <Header/>

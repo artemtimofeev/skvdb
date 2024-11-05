@@ -11,6 +11,7 @@ import (
 	"manager-backend/internal/lib/logger"
 	"manager-backend/internal/lib/response"
 	"manager-backend/internal/storage"
+	"manager-backend/internal/storage/postgres"
 	"net/http"
 )
 
@@ -28,7 +29,7 @@ type UserCreator interface {
 	CreateUser(username string, password string) error
 }
 
-func NewPost(log *slog.Logger, userCreator UserCreator) http.HandlerFunc {
+func NewPost(log *slog.Logger, userCreator UserCreator, strg *postgres.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "rest.api.signup.NewPost"
 
@@ -85,6 +86,23 @@ func NewPost(log *slog.Logger, userCreator UserCreator) http.HandlerFunc {
 		}
 
 		log.Info("user created", slog.String("username", req.Username))
+
+		user, err := strg.GetUser(req.Username)
+		if errors.Is(err, storage.ErrUsernameNotFound) {
+			log.Info("username not found", slog.String("username", req.Username))
+
+			render.JSON(w, r, response.Error("username not found"))
+
+			return
+		}
+		err = strg.AddTransaction("INFLOW", "Registration bonus", 3000, user.Id)
+		if err != nil {
+			log.Info("error adding registration bonus", slog.String("username", req.Username))
+
+			render.JSON(w, r, response.Error("error adding registration bonus"))
+
+			return
+		}
 
 		// TODO: implement token authentication
 		responseOK(w, r, req.Username)

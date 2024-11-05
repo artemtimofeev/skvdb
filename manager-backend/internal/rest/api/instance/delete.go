@@ -10,13 +10,21 @@ import (
 	"manager-backend/internal/service/cloud/server"
 	"manager-backend/internal/storage/postgres"
 	"net/http"
+	"strconv"
 )
 
 func NewDelete(log *slog.Logger, cloud server.Cloud, storage *postgres.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "rest.api.instance.NewDelete"
 
-		instanceId := chi.URLParam(r, "instanceId")
+		instanceId, err := strconv.Atoi(chi.URLParam(r, "instanceId"))
+		if err != nil {
+			log.Error("failed to get instance", logger.Err(err))
+
+			render.JSON(w, r, response.Error("failed to get instance"))
+
+			return
+		}
 
 		log := log.With(
 			slog.String("op", op),

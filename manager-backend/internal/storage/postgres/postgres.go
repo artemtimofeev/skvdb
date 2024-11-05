@@ -24,7 +24,8 @@ func New() (*Storage, error) {
 	CREATE TABLE IF NOT EXISTS users (
 	    id SERIAL PRIMARY KEY ,
 	    username VARCHAR(255) UNIQUE NOT NULL,
-	    password_hash VARCHAR(255) NOT NULL);
+	    password_hash VARCHAR(255) NOT NULL,
+		balance INT NOT NULL);
 	`)
 	if err != nil {
 		return nil, fmt.Errorf("%s : %w", op, err)
@@ -45,6 +46,7 @@ func New() (*Storage, error) {
 	    port VARCHAR(255),
 	    status VARCHAR(255) NOT NULL,
 	    rate INT NOT NULL,
+	    paid_till TIMESTAMPTZ,
 	    FOREIGN KEY (user_id) REFERENCES users(id));
 	`)
 	if err != nil {

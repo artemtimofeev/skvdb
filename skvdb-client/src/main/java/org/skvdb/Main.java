@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws TableAlreadyExistsException, TableNotFoundException {
         ConnectionFactory cf = new ConnectionFactory();
 
-        cf.setHost("158.160.23.111");
+        cf.setHost("89.169.166.13");
         cf.setPort(4004);
         cf.setUsername("admin");
         cf.setPassword("password");
