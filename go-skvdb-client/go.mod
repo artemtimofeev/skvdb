@@ -1,1 +1,2 @@
-module go-skvdb-client
+module github.com/artemtimofeev/skvdb/go-skvdb-client
+
