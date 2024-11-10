@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go-skvdb-client/src/conn"
-	"go-skvdb-client/src/storage"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/conn"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/storage"
 )
 
 func main() {
