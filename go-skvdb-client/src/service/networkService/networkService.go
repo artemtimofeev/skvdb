@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"go-skvdb-client/src/dto"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/dto"
 	"net"
 	"strings"
 )

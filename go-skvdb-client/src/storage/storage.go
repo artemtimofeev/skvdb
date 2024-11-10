@@ -3,8 +3,8 @@ package storage
 import (
 	"errors"
 	"fmt"
-	"go-skvdb-client/src/dto"
-	"go-skvdb-client/src/service/networkService"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/dto"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/service/networkService"
 )
 
 var (

@@ -2,9 +2,9 @@ package userService
 
 import (
 	"fmt"
-	"go-skvdb-client/src/dto"
-	"go-skvdb-client/src/entity"
-	"go-skvdb-client/src/service/networkService"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/dto"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/entity"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/service/networkService"
 	"strconv"
 )
 

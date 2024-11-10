@@ -2,9 +2,9 @@ package conn
 
 import (
 	"fmt"
-	"go-skvdb-client/src/service/networkService"
-	"go-skvdb-client/src/service/userService"
-	"go-skvdb-client/src/storage"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/service/networkService"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/service/userService"
+	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/storage"
 )
 
 type Connection struct {
