@@ -7,9 +7,10 @@ import org.skvdb.common.exception.UserAlreadyExistsException;
 import org.skvdb.common.exception.UserNotFoundException;
 import org.skvdb.common.security.Authority;
 import org.skvdb.common.security.AuthorityType;
-import org.skvdb.common.storage.Table;
+import org.skvdb.service.dao.TableDao;
 import org.skvdb.service.dao.UserDao;
 import org.skvdb.common.dto.User;
+import org.skvdb.storage.v2.BaseTable;
 import org.skvdb.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,17 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
 
+    private TableDao tableDao;
+
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, TableDao tableDao) {
         this.userDao = userDao;
+        this.tableDao = tableDao;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return new ArrayList<>();
+        return userDao.getUsers();
     }
 
     @Override
@@ -47,8 +51,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String username) {
-
+    public void deleteUser(String username) throws UserNotFoundException {
+        userDao.deleteUser(username);
     }
 
     @Override
@@ -94,8 +98,17 @@ public class UserServiceImpl implements UserService {
                 || user.authorities().contains(new Authority(AuthorityType.OWNER, tableName));
     }
 
-    public List<Table<?>> getAllTables(String username) throws UserNotFoundException {
-        return null;
+    public List<BaseTable> getAllTables(String username) throws UserNotFoundException {
+        List<BaseTable> result = new ArrayList<>();
+        for (BaseTable table : tableDao.getTables()) {
+            if (hasAnyAuthority(username, table.getTableMetaData().getName())) {
+                result.add(table);
+            }
+        }
+        return result;
     }
 
+    public User getUser(String username) throws UserNotFoundException {
+        return userDao.getUser(username);
+    }
 }

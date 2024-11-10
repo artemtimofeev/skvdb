@@ -9,6 +9,7 @@ import org.skvdb.common.exception.UserAlreadyExistsException;
 import org.skvdb.server.network.dto.Request;
 import org.skvdb.server.network.dto.RequestResult;
 import org.skvdb.server.network.dto.Result;
+import org.skvdb.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +21,16 @@ import java.util.Map;
 @ControllerMapping(name = "create_user")
 public class CreateUserController implements Controller {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Override
-    public Result control(Request request) throws UserAlreadyExistsException {
+    public Result control(Request request) {
         Map<String, String> body = request.getBody();
-        userService.createUser(body.get("username"), body.get("password"), Boolean.parseBoolean(body.get("isSuperuser")));
+        try {
+            userService.createUser(body.get("username"), body.get("password"), Boolean.parseBoolean(body.get("isSuperuser")));
+        } catch (UserAlreadyExistsException e) {
+            return new Result(e);
+        }
         return new Result(RequestResult.OK, null);
     }
 }

@@ -7,9 +7,12 @@ public class Result {
 
     private Map<String, String> body;
 
-    public Result(RequestResult requestResult, Map<String, String> body) {
+    private String errorMessage;
+
+    public Result(RequestResult requestResult, Map<String, String> body, String errorMessage) {
         this.requestResult = requestResult;
         this.body = body;
+        this.errorMessage = errorMessage;
     }
 
     public Result() {}
@@ -20,5 +23,9 @@ public class Result {
 
     public Map<String, String> getBody() {
         return body;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

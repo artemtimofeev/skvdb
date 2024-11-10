@@ -8,7 +8,7 @@ import org.skvdb.controller.Controller;
 import org.skvdb.server.network.dto.Request;
 import org.skvdb.server.network.dto.RequestResult;
 import org.skvdb.server.network.dto.Result;
-import org.skvdb.common.storage.Storage;
+import org.skvdb.storage.v2.BaseStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +18,15 @@ import org.springframework.stereotype.Component;
 @ControllerMapping(name = StorageControllerMapping.FIND_TABLE)
 public class FindTableController implements Controller {
     @Autowired
-    private Storage storage;
+    private BaseStorage storage;
 
     @Override
-    public Result control(Request request) throws TableNotFoundException {
-        storage.findTableByName(request.getBody().get("table"), String.class);
-        return new Result(RequestResult.OK, null);
+    public Result control(Request request) {
+        try {
+            storage.findTableByName(request.getBody().get("table"));
+            return new Result(RequestResult.OK, null);
+        } catch (TableNotFoundException e) {
+            return new Result(e);
+        }
     }
 }

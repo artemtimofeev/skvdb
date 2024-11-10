@@ -3,12 +3,13 @@ package org.skvdb.storage;
 import org.skvdb.common.storage.Table;
 import org.skvdb.common.storage.TableMetaData;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class TableImpl<Value> implements Table<Value> {
+public class TableImpl<Value>  {
 
-    private Map<String, Value> container = new TreeMap<>();
+    /*private Map<String, Value> container = new TreeMap<>();
 
     private TableMetaData tableMetaData;
 
@@ -40,4 +41,9 @@ public class TableImpl<Value> implements Table<Value> {
     public TableMetaData getTableMetaData() {
         return tableMetaData;
     }
+
+    @Override
+    public Iterator<Map.Entry<String, Value>> getIterator() {
+        return container.entrySet().iterator();
+    }*/
 }

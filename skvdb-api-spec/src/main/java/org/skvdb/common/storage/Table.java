@@ -1,5 +1,8 @@
 package org.skvdb.common.storage;
 
+import java.util.Iterator;
+import java.util.Map;
+
 public interface Table<Value> {
     /**
      *
@@ -33,4 +36,7 @@ public interface Table<Value> {
      * @return
      */
     TableMetaData getTableMetaData();
+
+    Iterator<Map.Entry<String, Value>> getIterator();
+
 }

@@ -2,6 +2,7 @@ package org.skvdb.network;
 
 import org.skvdb.dto.Request;
 import org.skvdb.dto.Result;
+import org.skvdb.exception.ConnectionClosedException;
 import org.skvdb.exception.NetworkException;
 
 import java.io.*;
@@ -39,9 +40,9 @@ public class NetworkService {
 
     public void close() {
         try {
-            clientSocket.close();
             reader.close();
             writer.close();
+            clientSocket.close();
         } catch (IOException e) {
             throw new NetworkException(e);
         }
@@ -53,6 +54,9 @@ public class NetworkService {
         do {
             try {
                 line = reader.readLine();
+                if (line == null) {
+                    throw new ConnectionClosedException("connection closed");
+                }
                 answer.append(line);
             } catch (IOException e) {
                 throw new NetworkException(e);

@@ -1,9 +1,8 @@
 package org.skvdb.network;
 
 import org.skvdb.common.service.UserService;
-import org.skvdb.common.storage.Storage;
 import org.skvdb.service.UserServiceImpl;
-import org.skvdb.storage.StorageImpl;
+import org.skvdb.storage.Storage;
 
 public class Connection {
     private String username;
@@ -18,7 +17,7 @@ public class Connection {
         this.username = username;
         this.password = password;
 
-        this.storage = new StorageImpl(username, password, networkService);
+        this.storage = new Storage(username, password, networkService);
         this.userService = new UserServiceImpl(username, password, networkService);
     }
 

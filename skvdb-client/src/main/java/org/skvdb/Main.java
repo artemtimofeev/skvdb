@@ -2,17 +2,18 @@ package org.skvdb;
 
 import org.skvdb.common.exception.TableAlreadyExistsException;
 import org.skvdb.common.exception.TableNotFoundException;
-import org.skvdb.common.storage.Storage;
-import org.skvdb.common.storage.Table;
+import org.skvdb.common.storage.TableMetaData;
 import org.skvdb.network.Connection;
 import org.skvdb.network.ConnectionFactory;
+import org.skvdb.storage.Storage;
+import org.skvdb.storage.Table;
 
 
 public class Main {
     public static void main(String[] args) throws TableAlreadyExistsException, TableNotFoundException {
         ConnectionFactory cf = new ConnectionFactory();
 
-        cf.setHost("89.169.166.13");
+        cf.setHost("localhost");
         cf.setPort(4004);
         cf.setUsername("admin");
         cf.setPassword("password");
@@ -23,26 +24,12 @@ public class Main {
         //create user
         //executor.createUser("user", "password", false);
         Storage storage = executor.getStorage();
-        Table<String> table = storage.createTable("test", String.class);
-        //Table<String> table = storage.findTableByName("test", String.class);
-        table.set("1", "test");
+        //Table<String> table = storage.createTable("test", String.class);
+        Table table = storage.findTableByName("test22");
+        //table.set("1", "test");
 
-        System.out.println(table.get("1"));
+        System.out.println(table.get("100"));
 
         conn.close();
-
-        /*Table table = (Table) Proxy.newProxyInstance(Table.class.getClassLoader(), new Class<?>[]{Table.class}, new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                Parameter[] parameters = method.getParameters();
-
-                for (Parameter parameter : parameters) {
-                    System.out.println("Имя параметра: " + parameter.getName());
-                }
-                return null;
-            }
-        });
-
-        table.get("123");*/
     }
 }

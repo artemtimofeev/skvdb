@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class StorageImpl implements Storage {
-    private List<Table<?>> tables = new ArrayList<>();
+
+public class StorageImpl {
+    /*private List<Table<?>> tables = new ArrayList<>();
 
     @Override
     public <Value> Table<Value> findTableByName(String name, Class<?> valueClass) throws TableNotFoundException {
@@ -44,5 +44,5 @@ public class StorageImpl implements Storage {
             }
         }
         return false;
-    }
+    }*/
 }

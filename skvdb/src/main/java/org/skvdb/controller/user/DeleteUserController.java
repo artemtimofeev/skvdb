@@ -9,6 +9,7 @@ import org.skvdb.controller.Controller;
 import org.skvdb.server.network.dto.Request;
 import org.skvdb.server.network.dto.RequestResult;
 import org.skvdb.server.network.dto.Result;
+import org.skvdb.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +21,17 @@ import java.util.Map;
 @ControllerMapping(name = "delete_user")
 public class DeleteUserController implements Controller {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Override
-    public Result control(Request request) throws UserNotFoundException {
+    public Result control(Request request) {
         Map<String, String> body = request.getBody();
         String username = body.get("username");
-        userService.deleteUser(username);
+        try {
+            userService.deleteUser(username);
+        } catch (UserNotFoundException e) {
+            return new Result(e);
+        }
         return new Result(RequestResult.OK, null);
     }
 }
