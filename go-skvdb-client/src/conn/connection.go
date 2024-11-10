@@ -24,6 +24,10 @@ func (conn *Connection) GetUserService() *userService.UserService {
 	return &conn.userService
 }
 
+func (conn *Connection) Close() error {
+	return conn.networkService.Close()
+}
+
 func newConnection(host string, port int, username string, password string) (*Connection, error) {
 	const op = "network.newConnection"
 	ntwrkService, err := networkService.NewNetworkService(host, port)
