@@ -6,6 +6,7 @@ import (
 	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/entity"
 	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/service/networkService"
 	"strconv"
+	"strings"
 )
 
 type UserService interface {
@@ -122,6 +123,7 @@ func (userService *UserServiceImpl) GetUser(username string) (entity.User, error
 	if response.Result == "OK" {
 		authorities := make([]entity.Authority, 0)
 		for table, authorityType := range response.Body {
+			table = strings.Split(table, "$")[0]
 			authority := entity.Authority{AuthorityType: authorityType, TableName: table}
 			authorities = append(authorities, authority)
 		}

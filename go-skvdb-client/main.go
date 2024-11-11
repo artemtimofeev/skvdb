@@ -1,4 +1,4 @@
-package go_skvdb_client
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/storage"
 )
 
-func tets2() {
+func main() {
 	cf1 := conn.NewConnectionFactory("localhost", 4004, "admin", "password")
 	connection1, err := cf1.CreateConnection()
 	if err != nil {
@@ -22,15 +22,23 @@ func tets2() {
 	if err != nil {
 		panic(err)
 	}
+	err = userService.CreateUser("kek", "test88", false)
+	if err != nil {
+		panic(err)
+	}
 	err = userService.GrantAuthority("123", "OWNER", "123")
 	if err != nil {
 		panic(err)
 	}
-	res, err := userService.HasAuthority("123", "OWNER", "123")
+	err = userService.GrantAuthority("123", "READ", "123")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(res)
+	users, err := userService.GetAllUsers()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(users)
 }
 
 func test(st *storage.Storage) {

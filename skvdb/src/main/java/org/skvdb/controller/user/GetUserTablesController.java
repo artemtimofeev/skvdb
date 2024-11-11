@@ -36,7 +36,7 @@ public class GetUserTablesController implements Controller {
 
         Map<String, String> answer = new HashMap<>();
         for (Authority authority : user.authorities()) {
-            answer.put(authority.tableName(), String.valueOf(authority.authorityType()));
+            answer.put(authority.tableName() + "$" + authority.authorityType(), String.valueOf(authority.authorityType()));
         }
 
         return new Result(RequestResult.OK, answer);
