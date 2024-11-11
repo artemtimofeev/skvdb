@@ -11,16 +11,15 @@ async function CreateNewUserRequest(username, password, isSuperuser, instanceId)
         body: JSON.stringify({username: username, password: password, isSuperuser: isSuperuser})
     };
 
-    try {
-        const response = await fetch(`${HTTP_SCHEMA}://${HOST}/api/instance/${instanceId}/user`, options);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
+    const response = await fetch(`${HTTP_SCHEMA}://${HOST}/api/instance/${instanceId}/user`, options);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    const responseBody = await response.json()
+    if (responseBody.result === "Error") {
+        throw new Error(`Error: ${responseBody.error}`)
+    }
+    return responseBody;
 }
 
 export default CreateNewUserRequest;

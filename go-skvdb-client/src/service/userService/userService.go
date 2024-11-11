@@ -63,7 +63,7 @@ func (userService *UserServiceImpl) DeleteUser(username string) error {
 	response, err := userService.networkService.Send(dto.Request{
 		Username:   userService.username,
 		Password:   userService.password,
-		MethodName: "create_user",
+		MethodName: "delete_user",
 		Body:       body,
 	})
 	if err != nil {

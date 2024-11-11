@@ -8,7 +8,7 @@ function DbLogs(){
 
     const {instanceId} = useParams();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = () => {
             DbLogsRequest(instanceId).then(result => {
                 setData(result.result);
@@ -20,7 +20,7 @@ function DbLogs(){
         const intervalId = setInterval(fetchData, 5000); // Обновление каждые 5 секунд
 
         return () => clearInterval(intervalId); // Очистка интервала при размонтировании компонента
-    }, []);
+    }, []);*/
 
     return <LogsWindow content={data}/>;
 }

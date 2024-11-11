@@ -84,11 +84,11 @@ func main() {
 
 	r.Post("/api/instance/{instanceId}/permission", permission.NewPost(log))
 
-	r.Post("/api/instance/{instanceId}/user", user.NewPost(log))
+	r.Post("/api/instance/{instanceId}/user", user.NewPost(log, storage))
 
-	r.Delete("/api/instance/{instanceId}/user/{username}", user.NewDelete(log))
+	r.Delete("/api/instance/{instanceId}/user/{username}", user.NewDelete(log, storage))
 
-	r.Get("/api/instance/{instanceId}/user", user.NewGet(log))
+	r.Get("/api/instance/{instanceId}/user", user.NewGet(log, storage))
 
 	r.Post("/api/instance", instance.NewPost(log, cloud, storage))
 

@@ -36,6 +36,8 @@ function CreateUserModal({showCreate, setShowCreate}){
 
     const {instanceId} = useParams();
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleSubmit = (e) => {
         e.preventDefault();
         CreateNewUserRequest( formData.username, formData.password, formData.isSuperuser, instanceId)
@@ -44,6 +46,7 @@ function CreateUserModal({showCreate, setShowCreate}){
                 setRedirect(true);
             })
             .catch(error => {
+                setErrorMessage(error.message)
                 console.error('Error:', error);
             });
     };
@@ -65,9 +68,9 @@ function CreateUserModal({showCreate, setShowCreate}){
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     <Form.Check name="isSuperuser" onChange={handleChangeCheckbox} type="checkbox" label="Superuser" />
                 </Form.Group>
-                <Alert key="danger" variant="danger">
-                    Error
-                </Alert>
+                {errorMessage !== "" ? <Alert key="danger" variant="danger">
+                        {errorMessage}
+                </Alert> : ""}
             </Modal.Body>
             <Modal.Footer>
                 <Button type="submit" variant="outline-primary">

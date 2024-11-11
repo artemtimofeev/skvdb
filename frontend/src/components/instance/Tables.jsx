@@ -16,20 +16,20 @@ function Tables() {
 
     const {instanceId} = useParams();
 
-    useEffect(() => {
+    /*useEffect(() => {
         GetAllTablesRequest(instanceId).then(
             response => {
                 setTables(response.result);
             }
         )
-    }, [instanceId]);
+    }, [instanceId]);*/
 
     const [users, setUsers] = useState([]);
 
     useEffect(()=>{
         GetAllUsersRequest(instanceId).then(response => {
-            setUsers(response.result);
-        })
+            setUsers(response.users);
+        }).catch(error => console.log(error))
     }, [instanceId]);
 
     return <>

@@ -31,7 +31,7 @@ function Instances() {
                     <th>ip</th>
                     <th>port</th>
                     <th>status</th>
-                    <th>rate</th>
+                    <th>rate (T per 5 minutes)</th>
                 </tr>
                 </thead>
                 <tbody>

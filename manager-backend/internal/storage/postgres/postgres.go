@@ -43,7 +43,7 @@ func New() (*Storage, error) {
 	    server_id VARCHAR(255) NOT NULL,
 	    instance_name VARCHAR(255) NOT NULL,
 	    ip VARCHAR(255),
-	    port VARCHAR(255),
+	    port INT,
 	    status VARCHAR(255) NOT NULL,
 	    rate INT NOT NULL,
 	    paid_till TIMESTAMPTZ,

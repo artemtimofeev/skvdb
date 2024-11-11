@@ -50,7 +50,7 @@ func Initializer(log *slog.Logger, storage *postgres.Storage, ticker *time.Ticke
 
 						instance.Status = "RUNNING"
 						instance.Ip = ip
-						instance.Port = "4004"
+						instance.Port = 4004
 						instance.PaidTill = time.Now()
 
 						err := storage.UpdateInstance(instance)

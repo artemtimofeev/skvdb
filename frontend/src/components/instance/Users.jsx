@@ -18,19 +18,19 @@ function Users() {
 
     useEffect(()=>{
         GetAllUsersRequest(instanceId).then(response => {
-            setUsers(response.result);
-        })
+            setUsers(response.users);
+        }).catch(error => console.log(error))
     }, [instanceId]);
 
     const [tables, setTables]= useState([]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         GetAllTablesRequest(instanceId).then(
             response => {
                 setTables(response.result);
             }
         )
-    }, [instanceId]);
+    }, [instanceId]);*/
 
     return <>
         <Table striped bordered hover>
@@ -48,7 +48,7 @@ function Users() {
                     return <tr>
                         <td>{user.name}</td>
                         <td>{user.permissions}</td>
-                        <td>{user.isSuperuser}</td>
+                        <td>{user.isSuperuser.toString()}</td>
                         <td>
                             <Button variant="outline-danger" onClick={() => {
                                 setShowDelete(true);

@@ -102,7 +102,7 @@ func (s *Storage) CreateInstance(username string, instanceName string, serverId 
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
-	_, err = stmt.Exec(user.Id, serverId, instanceName, "", "", "INITIALIZING", 30, time.Now())
+	_, err = stmt.Exec(user.Id, serverId, instanceName, "", 0, "INITIALIZING", 30, time.Now())
 	if err != nil {
 		return fmt.Errorf("%s: execute statement: %w", op, err)
 	}
@@ -129,7 +129,7 @@ func (s *Storage) UpdateInstance(instance dto.Instance) error {
 func (s *Storage) DeleteInstance(instanceId int) error {
 	const op = "storage.postgres.DeleteInstance"
 
-	stmt, err := s.db.Prepare("UPDATE instances SET status = 'DELETED', ip = '', port = '' WHERE id = $1")
+	stmt, err := s.db.Prepare("UPDATE instances SET status = 'DELETED', ip = '', port = 4004 WHERE id = $1")
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}

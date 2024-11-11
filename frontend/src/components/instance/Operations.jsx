@@ -10,13 +10,13 @@ function Operations() {
 
     const {instanceId} = useParams();
 
-    useEffect(() => {
+    /*useEffect(() => {
         GetAllOperationsRequest(instanceId).then(
             response => {
                 setOperations(response.result);
             }
         )
-    }, [instanceId]);
+    }, [instanceId]);*/
 
     return <>
         <Button variant="outline-danger" onClick={() => setShow(true)}>Delete instance</Button>
