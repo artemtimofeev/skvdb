@@ -75,11 +75,10 @@ public class UserDao {
         return userList;
     }
 
-
-
     public void deleteUser(String username) throws UserNotFoundException {
         if (users.containsKey(username) && !users.get(username).isProtected()) {
             users.delete(username);
+            return;
         }
         throw new UserNotFoundException();
     }
@@ -94,6 +93,7 @@ public class UserDao {
     public void updateUser(User user) throws UserNotFoundException {
         if (users.containsKey(user.username())) {
             users.set(user.username(), user);
+            return;
         }
         throw new UserNotFoundException();
     }

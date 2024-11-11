@@ -1,4 +1,4 @@
-package go_skvdb_client
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/storage"
 )
 
-func test2() {
+func main() {
 	cf1 := conn.NewConnectionFactory("localhost", 4004, "admin", "password")
 	connection1, err := cf1.CreateConnection()
 	if err != nil {
@@ -19,7 +19,10 @@ func test2() {
 		panic(err)
 	}
 
-	userService.DeleteUser("123")
+	err = userService.DeleteUser("123")
+	if err != nil {
+		panic(err)
+	}
 }
 
 func test(st *storage.Storage) {

@@ -37,7 +37,7 @@ public class Connection {
             logger.debug("Клиент (id={}) отправил {} запрос с телом: {} [u={}, p={}]", client.getId(), request.getMethodName(), request.getBody(), request.getUsername(), request.getPassword());
             Result result = resolveRequest(request);
             networkService.send(result);
-            logger.debug("Клиенту (id={}) отправлен результат {}", client.getId(), result.getBody());
+            logger.debug("Клиенту (id={}) отправлен результат {} {}", client.getId(), result.getBody(), result.getErrorMessage());
         }
     }
 
