@@ -78,11 +78,11 @@ func main() {
 
 	r.Get("/api/instance/{instanceId}/table", table.NewGet(log, storage))
 
-	r.Post("/api/instance/{instanceId}/table", table.NewPost(log))
+	r.Post("/api/instance/{instanceId}/table", table.NewPost(log, storage))
 
-	r.Delete("/api/instance/{instanceId}/table/{tableName}", table.NewDelete(log))
+	r.Delete("/api/instance/{instanceId}/table/{tableName}", table.NewDelete(log, storage))
 
-	r.Post("/api/instance/{instanceId}/permission", permission.NewPost(log))
+	r.Post("/api/instance/{instanceId}/permission", permission.NewPost(log, storage))
 
 	r.Post("/api/instance/{instanceId}/user", user.NewPost(log, storage))
 

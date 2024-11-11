@@ -27,16 +27,17 @@ function CreateTableModal({showCreate, setShowCreate}) {
 
     const {instanceId} = useParams();
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
         CreateNewTableRequest( formData.tableName, instanceId)
-            .then(data => {
-                console.log('Success:', data);
+            .then(() => {
                 setRedirect(true);
             })
             .catch(error => {
-                console.error('Error:', error);
+                setErrorMessage(error.message)
             });
     };
 
@@ -50,9 +51,9 @@ function CreateTableModal({showCreate, setShowCreate}) {
                     <Form.Label>Table name</Form.Label>
                     <Form.Control required name="tableName" value={formData.tableName} onChange={handleChange}/>
                 </Form.Group>
-                <Alert key="danger" variant="danger">
-                    Error
-                </Alert>
+                {errorMessage !== "" ? <Alert key="danger" variant="danger">
+                    {errorMessage}
+                </Alert> : ""}
             </Modal.Body>
             <Modal.Footer>
                 <Button type="submit" variant="outline-primary">

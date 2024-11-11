@@ -59,12 +59,14 @@ public class UserServiceImpl implements UserService {
     public void grantAuthority(String username, Authority authority) throws UserNotFoundException {
         User user = userDao.getUser(username);
         user.authorities().add(authority);
+        userDao.updateUser(user);
     }
 
     @Override
     public void revokeAuthority(String username, Authority authority) throws UserNotFoundException {
         User user = userDao.getUser(username);
         user.authorities().remove(authority);
+        userDao.updateUser(user);
     }
 
     @Override

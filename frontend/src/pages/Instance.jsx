@@ -16,7 +16,7 @@ function Instance() {
                 <Tab eventKey="tables" title="Tables">
                     <Tables/>
                 </Tab>
-                <Tab eventKey="logs" title="DB Logs">
+                <Tab eventKey="logs" title="DB Logs" disabled={true}>
                     <DbLogs/>
                 </Tab>
                 <Tab eventKey="operations" title="Operations">
