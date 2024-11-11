@@ -16,6 +16,7 @@ func main() {
 	str := *connection1.GetStorage()
 	str.CreateTable("test")
 	str.CreateTable("test2")
+
 }
 
 func test(st *storage.Storage) {

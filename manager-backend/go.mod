@@ -12,7 +12,7 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/ajg/form v1.5.1 // indirect
-	github.com/artemtimofeev/skvdb/go-skvdb-client v0.0.0-20241111103043-8027b984c3d4 // indirect
+	github.com/artemtimofeev/skvdb/go-skvdb-client v0.0.0-20241111170031-67bc60e99441 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-chi/render v1.0.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect

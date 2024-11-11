@@ -17,6 +17,7 @@ type Storage interface {
 	CreateTable(name string) (Table, error)
 	FindTableByName(name string) (Table, error)
 	GetAllTables() ([]Table, error)
+	DeleteTable(name string) error
 }
 
 type StorageImpl struct {
