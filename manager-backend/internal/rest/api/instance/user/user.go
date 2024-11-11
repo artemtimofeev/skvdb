@@ -156,7 +156,7 @@ func NewDelete(log *slog.Logger, st *postgres.Storage) http.HandlerFunc {
 type PostRequest struct {
 	Username    string `json:"username" validate:"required,alphanum"`
 	Password    string `json:"password" validate:"required"`
-	IsSuperuser bool   `json:"isSuperuser" validate:"required,boolean"`
+	IsSuperuser bool   `json:"isSuperuser"`
 }
 
 func NewPost(log *slog.Logger, st *postgres.Storage) http.HandlerFunc {

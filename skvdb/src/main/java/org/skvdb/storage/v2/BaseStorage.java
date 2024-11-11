@@ -21,6 +21,10 @@ public class BaseStorage {
         throw new TableNotFoundException();
     }
 
+    public void deleteTable(String name) {
+        tables.removeIf(table -> table.getTableMetaData().getName().equals(name));
+    }
+
     synchronized public BaseTable createTable(String name) throws TableAlreadyExistsException {
         if (isTablePresented(name)) {
             throw new TableAlreadyExistsException();

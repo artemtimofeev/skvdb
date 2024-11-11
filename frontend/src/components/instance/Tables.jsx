@@ -16,13 +16,13 @@ function Tables() {
 
     const {instanceId} = useParams();
 
-    /*useEffect(() => {
+    useEffect(() => {
         GetAllTablesRequest(instanceId).then(
             response => {
-                setTables(response.result);
+                setTables(response.tables);
             }
         )
-    }, [instanceId]);*/
+    }, [instanceId]);
 
     const [users, setUsers] = useState([]);
 
@@ -37,7 +37,7 @@ function Tables() {
             <thead>
             <tr>
                 <th>name</th>
-                <th>permissions</th>
+                {/*<th>permissions</th>*/}
                 <th>operations</th>
             </tr>
             </thead>
@@ -45,16 +45,16 @@ function Tables() {
             {tables.map((table, index) => {
                 return <tr key={index}>
                     <td>{table.name}</td>
-                    <td>{table.permissions}</td>
+                    {/*<td>{table.permissions}</td>*/}
                     <td>
                         <Button variant="outline-danger" onClick={() => {
                             setTableName(table.name);
                             setShowDelete(true);
                         }}>Delete table</Button>{' '}
-                        <Button variant="outline-primary" onClick={() => {
+                        {/*<Button variant="outline-primary" onClick={() => {
                             setTableName(table.name);
                             setShowPermissions(true)
-                        }}>Manage permissions</Button>{' '}
+                        }}>Manage permissions</Button>{' '}*/}
                     </td>
                 </tr>
             })}

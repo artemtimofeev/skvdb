@@ -90,3 +90,23 @@ func (storage *StorageImpl) GetAllTables() ([]Table, error) {
 	}
 	return nil, fmt.Errorf("%s", response.Error)
 }
+
+func (storage *StorageImpl) DeleteTable(name string) error {
+	const op = "storage.deleteTable"
+
+	body := make(map[string]string)
+	body["table"] = name
+	response, err := storage.networkService.Send(dto.Request{
+		Username:   storage.username,
+		Password:   storage.password,
+		MethodName: "delete_table",
+		Body:       body,
+	})
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+	if response.Result == "OK" {
+		return nil
+	}
+	return fmt.Errorf("%s", response.Error)
+}

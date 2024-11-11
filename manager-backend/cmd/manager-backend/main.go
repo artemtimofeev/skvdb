@@ -76,7 +76,7 @@ func main() {
 
 	r.Delete("/api/instance/{instanceId}", instance.NewDelete(log, cloud, storage))
 
-	r.Get("/api/instance/{instanceId}/table", table.NewGet(log))
+	r.Get("/api/instance/{instanceId}/table", table.NewGet(log, storage))
 
 	r.Post("/api/instance/{instanceId}/table", table.NewPost(log))
 

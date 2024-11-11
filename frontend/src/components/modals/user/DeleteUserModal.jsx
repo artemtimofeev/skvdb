@@ -26,7 +26,7 @@ function DeleteUserModal({showDelete, setShowDelete, username}) {
             <Button variant="outline-danger" onClick={() => {
                 DeleteUserRequest(username, instanceId).then(() => {
                         setRedirect(true);
-                });
+                }).catch(error => console.log(error));
             }}>
                 Yes
             </Button>

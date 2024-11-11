@@ -24,13 +24,13 @@ function Users() {
 
     const [tables, setTables]= useState([]);
 
-    /*useEffect(() => {
+    useEffect(() => {
         GetAllTablesRequest(instanceId).then(
             response => {
-                setTables(response.result);
+                setTables(response.tables);
             }
         )
-    }, [instanceId]);*/
+    }, [instanceId]);
 
     return <>
         <Table striped bordered hover>
@@ -45,6 +45,9 @@ function Users() {
             <tbody>
             {
                 users.map((user, index) => {
+                    if (user.name === "admin") {
+                        return <></>
+                    }
                     return <tr>
                         <td>{user.name}</td>
                         <td>{user.permissions}</td>
