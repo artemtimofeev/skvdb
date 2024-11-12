@@ -4,16 +4,17 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"manager-backend/internal/config"
 )
 
 type Storage struct {
 	db *sql.DB
 }
 
-func New() (*Storage, error) {
+func New(database config.Database) (*Storage, error) {
 	const op = "storage.postgres.New"
 
-	connStr := "user=postgres dbname=postgres password=password sslmode=disable port=32768"
+	connStr := fmt.Sprintf("user=%s dbname=postgres password=%s sslmode=disable port=%s host=%s", database.User, database.Password, database.Port, database.Address)
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {

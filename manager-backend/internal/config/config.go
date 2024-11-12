@@ -9,15 +9,22 @@ import (
 
 type Config struct {
 	Env                      string `yaml:"env" env-required:"true"`
-	StoragePath              string `yaml:"storage_path" env-required:"true"`
 	YandexPassportOAuthToken string `env:"YANDEX_PASSPORT_OAUTH_TOKEN" env-required:"true"`
 	HTTPServer               `yaml:"http_server"`
+	Database                 `yaml:"database"`
 }
 
 type HTTPServer struct {
 	Address     string        `yaml:"address" env-default:"localhost:8080"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
+}
+
+type Database struct {
+	Address  string `yaml:"address" env-required:"true"`
+	Port     int    `yaml:"port" env-required:"true"`
+	User     string `yaml:"user" env-required:"true"`
+	Password string `env:"DB_PASSWORD" env-required:"true"`
 }
 
 func MustLoad() *Config {

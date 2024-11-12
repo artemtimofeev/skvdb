@@ -27,7 +27,6 @@ import (
 
 const (
 	envLocal = "local"
-	envDev   = "dev"
 	envProd  = "prod"
 )
 
@@ -41,7 +40,7 @@ func main() {
 
 	log.Info("starting kvdb backend")
 
-	storage, err := postgres.New()
+	storage, err := postgres.New(cfg.Database)
 	if err != nil {
 		log.Error("failed to init storage", logger.Err(err))
 		os.Exit(1)
@@ -106,6 +105,8 @@ func setupLogger(env string) *slog.Logger {
 
 	switch env {
 	case envLocal:
+		log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	case envProd:
 		log = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	}
 
