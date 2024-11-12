@@ -6,7 +6,6 @@ import org.skvdb.common.exception.TableNotFoundException;
 import org.skvdb.configuration.settings.SecuritySettings;
 import org.skvdb.common.exception.UserAlreadyExistsException;
 import org.skvdb.common.exception.UserNotFoundException;
-import org.skvdb.storage.v2.BaseTable;
 import org.skvdb.storage.v2.StructedStorage;
 import org.skvdb.storage.v2.StructedTable;
 import org.skvdb.util.HashUtil;

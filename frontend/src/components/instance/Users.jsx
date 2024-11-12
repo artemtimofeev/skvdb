@@ -50,7 +50,7 @@ function Users() {
                     }
                     return <tr>
                         <td>{user.name}</td>
-                        <td>{user.permissions}</td>
+                        <td style={{ whiteSpace: 'pre-line' }}>{user.permissions}</td>
                         <td>{user.isSuperuser.toString()}</td>
                         <td>
                             <Button variant="outline-danger" onClick={() => {

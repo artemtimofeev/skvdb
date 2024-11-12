@@ -20,7 +20,7 @@ function Operations() {
 
     return <>
         <Button variant="outline-danger" onClick={() => setShow(true)}>Delete instance</Button>
-        <Table striped bordered hover className='mt-3'>
+        {/*<Table striped bordered hover className='mt-3'>
             <thead>
             <tr>
                 <th>id</th>
@@ -37,7 +37,7 @@ function Operations() {
                 </tr>
             })}
             </tbody>
-        </Table>
+        </Table>*/}
         <DeleteInstanceModal show={show} setShow={setShow}/>
     </>;
 }

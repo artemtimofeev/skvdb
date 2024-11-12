@@ -42,22 +42,30 @@ function Tables() {
             </tr>
             </thead>
             <tbody>
-            {tables.map((table, index) => {
-                return <tr key={index}>
-                    <td>{table.name}</td>
-                    {/*<td>{table.permissions}</td>*/}
-                    <td>
-                        <Button variant="outline-danger" onClick={() => {
-                            setTableName(table.name);
-                            setShowDelete(true);
-                        }}>Delete table</Button>{' '}
-                        {/*<Button variant="outline-primary" onClick={() => {
-                            setTableName(table.name);
-                            setShowPermissions(true)
-                        }}>Manage permissions</Button>{' '}*/}
-                    </td>
-                </tr>
-            })}
+            {
+                    tables.map((table, index) => {
+                        if (table.name !== "users") {
+                            return <tr key={index}>
+                                <td>{table.name}</td>
+                                {/*<td>{table.permissions}</td>*/}
+                                <td>
+                                    <Button variant="outline-danger" onClick={() => {
+                                        setTableName(table.name);
+                                        setShowDelete(true);
+                                    }}>Delete table</Button>{' '}
+                                    {/*<Button variant="outline-primary" onClick={() => {
+                                    setTableName(table.name);
+                                    setShowPermissions(true)
+                                }}>Manage permissions</Button>{' '}*/}
+                                </td>
+                            </tr>
+                        } else {
+                            return <></>
+                        }
+
+                     }
+                     )
+            }
             </tbody>
         </Table>
 

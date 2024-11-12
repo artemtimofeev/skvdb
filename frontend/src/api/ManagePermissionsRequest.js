@@ -17,16 +17,15 @@ async function ManagePermissionsRequest(tableName, username, isOwner, isReader, 
         })
     };
 
-    try {
-        const response = await fetch(`${HTTP_SCHEMA}://${HOST}/api/instance/${instanceId}/permission`, options);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
+    const response = await fetch(`${HTTP_SCHEMA}://${HOST}/api/instance/${instanceId}/permission`, options);
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    const responseBody = await response.json()
+    if (responseBody.result === "Error") {
+        throw new Error(`Error: ${responseBody.error}`)
+    }
+    return responseBody;
 }
 
 export default ManagePermissionsRequest;

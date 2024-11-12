@@ -39,7 +39,7 @@ function Instances() {
                     instances.map((instance, index) => {
                         return <tr>
                             <td>{instance.id}</td>
-                            {instance.status !== "DELETED" ?
+                            {instance.status === "RUNNING" ?
                                 <td><Link to={'/instance/' + instance.id + '/'}>{instance.name}</Link></td> :
                                 <td>{instance.name}</td>}
                             <td>{instance.ip}</td>
