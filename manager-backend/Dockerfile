@@ -3,11 +3,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o manager-backend/cmd/manager-backend .
+RUN go build manager-backend/cmd/manager-backend
 
-# Создаем финальный образ
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=builder /app/myapp .
+COPY --from=builder /app/manager-backend .
 EXPOSE 80
-CMD ["./myapp"]
+CMD ["./manager-backend"]
