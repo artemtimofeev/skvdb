@@ -8,5 +8,6 @@ RUN go mod download && go mod verify
 
 COPY . .
 RUN go build manager-backend/cmd/manager-backend
+EXPOSE 80
 
 CMD ["./manager-backend"]
