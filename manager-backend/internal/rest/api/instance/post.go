@@ -10,6 +10,7 @@ import (
 	"manager-backend/internal/lib/logger"
 	"manager-backend/internal/lib/response"
 	"manager-backend/internal/service/cloud/server"
+	"manager-backend/internal/storage/postgres"
 	"net/http"
 )
 
@@ -17,13 +18,11 @@ type CreateInstanceRequest struct {
 	InstanceName string `json:"instanceName" validate:"required,alphanum"`
 }
 
-type InstanceCreator interface {
-	CreateInstance(username string, instanceName string, serverId string) error
-}
-
-func NewPost(log *slog.Logger, cloud server.Cloud, creator InstanceCreator) http.HandlerFunc {
+func NewPost(log *slog.Logger, cloud server.Cloud, storage *postgres.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "rest.api.login.NewPost"
+
+		stor := *storage
 
 		log := log.With(
 			slog.String("op", op),
@@ -39,9 +38,25 @@ func NewPost(log *slog.Logger, cloud server.Cloud, creator InstanceCreator) http
 			return
 		}
 
+		instancesNotDeleted, err := stor.GetAllNotDeletedInstancesByUsername(username)
+		if err != nil {
+			log.Error("failed to get not deleted instances", logger.Err(err))
+
+			render.JSON(w, r, response.Error("failed to get not deleted instances"))
+
+			return
+		}
+		if len(instancesNotDeleted) >= 2 {
+			log.Info("can't create more than 2 instances in one account", logger.Err(err))
+
+			render.JSON(w, r, response.Error("can't create more than 2 instances in one account"))
+
+			return
+		}
+
 		var req CreateInstanceRequest
 
-		err := render.DecodeJSON(r.Body, &req)
+		err = render.DecodeJSON(r.Body, &req)
 
 		if errors.Is(err, io.EOF) {
 			log.Error("request body is empty")
@@ -86,7 +101,7 @@ func NewPost(log *slog.Logger, cloud server.Cloud, creator InstanceCreator) http
 			return
 		}
 
-		err = creator.CreateInstance(username, req.InstanceName, instanceId)
+		err = stor.CreateInstance(username, req.InstanceName, instanceId)
 		if err != nil {
 			log.Error("failed to create instance", logger.Err(err))
 

@@ -16,7 +16,7 @@ func (s *Storage) CreateUser(username string, passwordHash string) error {
 		return fmt.Errorf("%s: prepare statement: %w", op, err)
 	}
 
-	_, err = stmt.Exec(username, passwordHash, 3000)
+	_, err = stmt.Exec(username, passwordHash, 300)
 	if err != nil {
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) && pqErr.Code == "23505" {

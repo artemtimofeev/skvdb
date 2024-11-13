@@ -37,6 +37,37 @@ func (s *Storage) GetAllInstancesByUsername(username string) ([]dto.Instance, er
 	return instances, nil
 }
 
+func (s *Storage) GetAllNotDeletedInstancesByUsername(username string) ([]dto.Instance, error) {
+	const op = "storage.postgres.GetAllInstancesByUsername"
+
+	user, err := s.GetUser(username)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+
+	stmt, err := s.db.Prepare("SELECT id, user_id, server_id, instance_name, ip, port, status, rate, paid_till FROM instances WHERE user_id = $1 and status != 'DELETED'")
+	if err != nil {
+		return nil, fmt.Errorf("%s: prepare statement: %w", op, err)
+	}
+
+	rows, err := stmt.Query(user.Id)
+	if err != nil {
+		return nil, fmt.Errorf("%s: execute statement: %w", op, err)
+	}
+
+	instances := make([]dto.Instance, 0)
+
+	for rows.Next() {
+		var instance dto.Instance
+		if err := rows.Scan(&instance.Id, &instance.UserId, &instance.ServerId, &instance.Name, &instance.Ip, &instance.Port, &instance.Status, &instance.Rate, &instance.PaidTill); err != nil {
+			return nil, fmt.Errorf("%s: read row: %w", op, err)
+		}
+		instances = append(instances, instance)
+	}
+
+	return instances, nil
+}
+
 func (s *Storage) GetAllInitializingInstances() ([]dto.Instance, error) {
 	const op = "storage.postgres.GetAllInstancesByUsername"
 
