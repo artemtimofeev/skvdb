@@ -16,7 +16,7 @@ type UserService interface {
 	GetUser(username string) (entity.User, error)
 	GrantAuthority(username string, authority string, table string) error
 	GrantSuperuserAuthority(username string) error
-	HasAnyAuthority(username string) (bool, error)
+	HasAnyAuthority(username string, table string) (bool, error)
 	HasAuthority(username string, authority string, table string) (bool, error)
 	IsSuperuser(username string) (bool, error)
 	RevokeAuthority(username string, authority string, table string) error
@@ -174,11 +174,12 @@ func (userService *UserServiceImpl) GrantSuperuserAuthority(username string) err
 	return fmt.Errorf("%s", response.Error)
 }
 
-func (userService *UserServiceImpl) HasAnyAuthority(username string) (bool, error) {
+func (userService *UserServiceImpl) HasAnyAuthority(username string, table string) (bool, error) {
 	const op = "service.userService.HasAnyAuthority"
 
 	body := make(map[string]string)
 	body["username"] = username
+	body["table"] = table
 	response, err := userService.networkService.Send(dto.Request{
 		Username:   userService.username,
 		Password:   userService.password,

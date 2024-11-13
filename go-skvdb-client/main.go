@@ -1,4 +1,4 @@
-package main
+package go_skvdb_client
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/artemtimofeev/skvdb/go-skvdb-client/src/storage"
 )
 
-func main() {
+func test2() {
 	cf1 := conn.NewConnectionFactory("localhost", 4004, "admin", "password")
 	connection1, err := cf1.CreateConnection()
 	if err != nil {

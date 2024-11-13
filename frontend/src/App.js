@@ -7,6 +7,7 @@ import {Instances} from "./pages/Instances";
 import {Instance} from "./pages/Instance";
 import {NotFound} from "./pages/NotFound";
 import {Billing} from "./pages/Billing";
+import {Documentation} from "./pages/Documentation";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/instances" Component={Instances}/>
               <Route path="/instance/:instanceId" Component={Instance}/>
               <Route path="/billing" Component={Billing}/>
+              <Route path="/documentation" Component={Documentation}/>
               <Route path="*" Component={NotFound}/>
           </Routes>
       </BrowserRouter>

@@ -5,7 +5,7 @@ function MyCoolCodeBlock({ code, language, showLineNumbers }) {
         <div style={{ fontFamily: "JetBrains Mono"}}>
             <CodeBlock
             text={code}
-            language={"java"}
+            language={language}
             showLineNumbers={true}
             theme={androidstudio}
             />
