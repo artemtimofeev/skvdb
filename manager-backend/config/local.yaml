@@ -1,4 +1,5 @@
 env: "local"
+path_to_private_key: "C:\\Users\\temat\\.ssh\\openssh_private"
 database:
   address: "localhost"
   port: 32768

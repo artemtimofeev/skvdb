@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Initializer(log *slog.Logger, storage *postgres.Storage, ticker *time.Ticker, cloud server.Cloud) {
+func Initializer(log *slog.Logger, storage *postgres.Storage, ticker *time.Ticker, cloud server.Cloud, pathToPrivateKey string) {
 	for {
 		select {
 		case <-ticker.C:
@@ -42,7 +42,7 @@ func Initializer(log *slog.Logger, storage *postgres.Storage, ticker *time.Ticke
 							continue
 						}
 
-						err = server.InstallSkvdb(ip)
+						err = server.InstallSkvdb(ip, pathToPrivateKey)
 						if err != nil {
 							log.Error(fmt.Sprintf("Error installing instance %s ip %s", serverInstance.Id, ip), logger.Err(err))
 							continue

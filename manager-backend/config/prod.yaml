@@ -1,4 +1,5 @@
 env: "prod"
+path_to_private_key: "/keys/openssh_private"
 database:
   address: "db.skvdb.tech"
   port: 32768

@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Env                      string `yaml:"env" env-required:"true"`
+	PathToPrivateKey         string `yaml:"path_to_private_key" env-required:"true"`
 	YandexPassportOAuthToken string `env:"YANDEX_PASSPORT_OAUTH_TOKEN" env-required:"true"`
 	HTTPServer               `yaml:"http_server"`
 	Database                 `yaml:"database"`

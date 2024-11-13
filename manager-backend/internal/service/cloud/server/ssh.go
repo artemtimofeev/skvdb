@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-func InstallSkvdb(ip string) error {
+func InstallSkvdb(ip string, pathToPrivateKey string) error {
 	const op = "service.cloud.server.InstallSkvdb"
 
 	username := "admin"
-	keyPath := "C:\\Users\\temat\\.ssh\\openssh_private"
+	keyPath := pathToPrivateKey
 	host := ip + ":22"
 
 	key, err := os.ReadFile(keyPath)

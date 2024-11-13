@@ -48,7 +48,7 @@ func main() {
 
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
-	go daemon.Initializer(log, storage, ticker, cloud)
+	go daemon.Initializer(log, storage, ticker, cloud, cfg.PathToPrivateKey)
 
 	ticker2 := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
