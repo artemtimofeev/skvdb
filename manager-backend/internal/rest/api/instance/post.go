@@ -47,9 +47,9 @@ func NewPost(log *slog.Logger, cloud server.Cloud, storage *postgres.Storage) ht
 			return
 		}
 		if len(instancesNotDeleted) >= 2 {
-			log.Info("can't create more than 2 instances in one account")
+			log.Info("can't create more than 2 active instances in one account")
 
-			render.JSON(w, r, response.Error("can't create more than 2 instances in one account"))
+			render.JSON(w, r, response.Error("can't create more than 2 active instances in one account"))
 
 			return
 		}
