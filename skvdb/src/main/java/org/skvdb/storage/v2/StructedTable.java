@@ -3,6 +3,7 @@ package org.skvdb.storage.v2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.skvdb.exception.KeyNotFoundException;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class StructedTable<Value> {
         this.table = table;
     }
 
-    public Value get(String key) {
+    public Value get(String key) throws KeyNotFoundException {
         try {
             return parseFromJson(table.get(key));
         } catch (JsonProcessingException e) {

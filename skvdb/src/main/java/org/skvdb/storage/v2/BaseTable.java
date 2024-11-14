@@ -1,5 +1,7 @@
 package org.skvdb.storage.v2;
 
+import org.skvdb.exception.KeyNotFoundException;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,8 +15,12 @@ public class BaseTable {
         this.tableMetaData = tableMetaData;
     }
 
-    public String get(String key) {
-        return container.get(key);
+    public String get(String key) throws KeyNotFoundException {
+        String res = container.get(key);
+        if (res == null) {
+            throw new KeyNotFoundException();
+        }
+        return res;
     }
 
     public void set(String key, String value) {

@@ -6,6 +6,7 @@ import org.skvdb.common.exception.TableNotFoundException;
 import org.skvdb.configuration.settings.SecuritySettings;
 import org.skvdb.common.exception.UserAlreadyExistsException;
 import org.skvdb.common.exception.UserNotFoundException;
+import org.skvdb.exception.KeyNotFoundException;
 import org.skvdb.storage.v2.StructedStorage;
 import org.skvdb.storage.v2.StructedTable;
 import org.skvdb.util.HashUtil;
@@ -58,10 +59,11 @@ public class UserDao {
     }
 
     public User getUser(String username) throws UserNotFoundException {
-        if (users.containsKey(username)) {
+        try {
             return users.get(username);
+        } catch (KeyNotFoundException e) {
+            throw new UserNotFoundException();
         }
-        throw new UserNotFoundException();
     }
 
 
@@ -77,9 +79,13 @@ public class UserDao {
     }
 
     public void deleteUser(String username) throws UserNotFoundException {
-        if (users.containsKey(username) && !users.get(username).isProtected()) {
-            users.delete(username);
-            return;
+        try {
+            if (users.containsKey(username) && !users.get(username).isProtected()) {
+                users.delete(username);
+                return;
+            }
+        } catch (KeyNotFoundException e) {
+            throw new UserNotFoundException();
         }
         throw new UserNotFoundException();
     }

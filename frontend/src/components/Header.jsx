@@ -23,7 +23,7 @@ function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" className="full-width-collapse">
                     <Nav className="me-auto">
-                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}><Nav.Link href="/">Getting started</Nav.Link></Link>
+                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}><Nav.Link href="/">Hello world</Nav.Link></Link>
                         <Nav.Link href="/documentation">Documentation</Nav.Link>
                         {isLoggedIn && <>
                         <Link to="/instances" style={{ textDecoration: 'none', color: 'inherit' }}>

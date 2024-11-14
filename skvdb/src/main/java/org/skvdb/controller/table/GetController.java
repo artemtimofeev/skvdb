@@ -6,6 +6,7 @@ import org.skvdb.annotation.ControllerMapping;
 import org.skvdb.common.exception.TableNotFoundException;
 import org.skvdb.controller.Controller;
 import org.skvdb.common.security.AuthorityType;
+import org.skvdb.exception.KeyNotFoundException;
 import org.skvdb.server.network.dto.Request;
 import org.skvdb.server.network.dto.RequestResult;
 import org.skvdb.server.network.dto.Result;
@@ -35,7 +36,12 @@ public class GetController implements Controller {
         } catch (TableNotFoundException e) {
             return new Result(e);
         }
-        String value = table.get(body.get("key"));
+        String value = null;
+        try {
+            value = table.get(body.get("key"));
+        } catch (KeyNotFoundException e) {
+            return new Result(e);
+        }
 
         Map<String, String> answerBody = new HashMap<>();
         answerBody.put("value", value);
