@@ -48,6 +48,8 @@ func main() {
     const markdown2 =  `
 ##### 3.2 helloworld.go
 Вместо "localhost" и 4004 необходимо подставить ip и port из таблицы по ссылке http://skvdb.tech/instances, а вместо "admin" и "password" username и password созданного пользователя Хранилища (см. пункт 2).
+
+*Все возможности описаны в документации http://skvdb.tech/documentation.*
 `
     return <>
         <Header/>
