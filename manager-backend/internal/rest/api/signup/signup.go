@@ -95,7 +95,7 @@ func NewPost(log *slog.Logger, userCreator UserCreator, strg *postgres.Storage) 
 
 			return
 		}
-		err = strg.AddTransaction("INFLOW", "Registration bonus", 3000, user.Id)
+		err = strg.AddTransaction("INFLOW", "Registration bonus", 300, user.Id)
 		if err != nil {
 			log.Info("error adding registration bonus", slog.String("username", req.Username))
 
